@@ -472,7 +472,7 @@ void agregarCartaAMazo(int IDMazo, int IDCarta) {
 // FUNCIONES DE BATALLAS (Lista doble circular - inserción al final)
 
 
-// Verr si t
+// Ver siu ya se hizo una  batalla
 bool existeBatalla(int id) {
     if (primerBatalla == NULL) return false;
     Batallas* temp = primerBatalla;
