@@ -1,9 +1,10 @@
 #include <iostream>
-
 using namespace std;
 
-//lista simple 
-struct Cartas{
+
+
+// Lista simple - inserción al inicio
+struct Cartas {
     int IDCarta;
     string Nombre;
     string Rareza;
@@ -11,34 +12,33 @@ struct Cartas{
     int costoElixir;
     double dañoBase;
     int vidaBase;
+    Cartas* sig;
 
-    Cartas *sig;
-
-    Cartas(int IDC, string n, string r, string t, int ce, double db, int vb){
+    Cartas(int IDC, string n, string r, string t, int ce, double db, int vb) {
         IDCarta = IDC;
         Nombre = n;
         Rareza = r;
         Tipo = t;
         costoElixir = ce;
-        dañoBase = db; 
+        dañoBase = db;
         vidaBase = vb;
         sig = NULL;
     }
-}*primerCarta;
+} *primerCarta = NULL;
 
 
-//lista doble
-struct Jugadores{
+// Lista doble ordenada por nombre
+struct Jugadores {
     int IDJugador;
     string nombreUsuario;
     int nivelRey;
     int trofeos;
     int IDArena;
     int IDClan;
+    Jugadores* sig;
+    Jugadores* ant;
 
-    Jugadores *sig, *ant;
-
-    Jugadores(int IDJ, string n, int nr, int t, int IDA, int IDC){
+    Jugadores(int IDJ, string n, int nr, int t, int IDA, int IDC) {
         IDJugador = IDJ;
         nombreUsuario = n;
         nivelRey = nr;
@@ -48,13 +48,12 @@ struct Jugadores{
         sig = NULL;
         ant = NULL;
     }
-}*primerJugador;
+} *primerJugador = NULL;
 
-
-// Nodo de la sublista (guarda el ID de la carta)
+// Nodo sublista de cartas dentro de un mazo
 struct NodoCartaMazo {
     int IDCarta;
-    NodoCartaMazo *sig;
+    NodoCartaMazo* sig;
 
     NodoCartaMazo(int id) {
         IDCarta = id;
@@ -62,19 +61,17 @@ struct NodoCartaMazo {
     }
 };
 
-
-//lista simple
-struct Mazos{
+// Lista simple - inserción al final
+struct Mazos {
     int IDMazo;
     string nombreMazo;
     string tipoMazo;
-    int IDJugador; 
-    NodoCartaMazo *listaCartas;
+    int IDJugador;
+    NodoCartaMazo* listaCartas;
     int cantidadCartas;
+    Mazos* sig;
 
-    Mazos *sig;
-
-    Mazos(int IDM, string nm, string tm, int IDJ){
+    Mazos(int IDM, string nm, string tm, int IDJ) {
         IDMazo = IDM;
         nombreMazo = nm;
         tipoMazo = tm;
@@ -83,13 +80,12 @@ struct Mazos{
         cantidadCartas = 0;
         sig = NULL;
     }
-}*primerMazo;
+} *primerMazo = NULL;
 
-
-// Nodo de la sublista
+// Nodo sublista de jugadores dentro de un clan
 struct NodoJugadorClan {
     int IDJugador;
-    NodoJugadorClan *sig;
+    NodoJugadorClan* sig;
 
     NodoJugadorClan(int id) {
         IDJugador = id;
@@ -97,51 +93,46 @@ struct NodoJugadorClan {
     }
 };
 
-
-//lista circular de clanes 
-struct Clanes{
+// Lista circular - inserción al final
+struct Clanes {
     int IDClan;
     string nombreClan;
     string region;
     int cantidadMiembros;
     double puntajeClan;
-    NodoJugadorClan *listaJugadores;
+    NodoJugadorClan* listaJugadores;
+    Clanes* sig;
 
-    Clanes *sig;
-
-    Clanes(int idclan, string nclan, string reg, int cantmienbros, double puntaje){
+    Clanes(int idclan, string nclan, string reg, int cantmiembros, double puntaje) {
         IDClan = idclan;
         nombreClan = nclan;
         region = reg;
-        cantidadMiembros = cantmienbros;
+        cantidadMiembros = cantmiembros;
         puntajeClan = puntaje;
         listaJugadores = NULL;
         sig = NULL;
     }
-}*primerClan;
+} *primerClan = NULL;
 
-
-//lista simple de arenas
-struct Arenas{
+// Lista simple - inserción al inicio
+struct Arenas {
     int IDArena;
     string nombreArena;
     int trofeosMin;
     int trofeosMax;
+    Arenas* sig;
 
-    Arenas *sig;
-
-    Arenas(int IDA, string nA, int tmin, int tmax){
+    Arenas(int IDA, string nA, int tmin, int tmax) {
         IDArena = IDA;
         nombreArena = nA;
         trofeosMin = tmin;
         trofeosMax = tmax;
         sig = NULL;
     }
-}*primerArena;
+} *primerArena = NULL;
 
-
-//lista circular doble de batallas
-struct Batallas{
+// Lista doble circular - inserción al final
+struct Batallas {
     int IDBatalla;
     int IDJugador1;
     int IDJugador2;
@@ -152,11 +143,12 @@ struct Batallas{
     int coronasJ2;
     float duracion;
     int IDArena;
-    string fecha; //investigar como almacenar la fecha de manera eficiente
+    string fecha;
+    Batallas* sig;
+    Batallas* ant;
 
-    Batallas *sig, *ant;
-
-    Batallas(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, int cJ1, int cJ2, float d, int IDA, string f){
+    Batallas(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g,
+             int cJ1, int cJ2, float d, int IDA, string f) {
         IDBatalla = IDB;
         IDJugador1 = IDJ1;
         IDJugador2 = IDJ2;
@@ -171,4 +163,99 @@ struct Batallas{
         sig = NULL;
         ant = NULL;
     }
-}*primerBatalla;
+} *primerBatalla = NULL;
+
+
+
+
+
+
+
+
+
+
+
+// FUNCIONES DE CARTAS (Lista simple - inserción al inicio)
+
+
+// Ver si existe carta con ese ID
+bool existeCarta(int id) {
+    Cartas* temp = primerCarta;
+    while (temp != NULL) {
+        if (temp->IDCarta == id) {
+            return true;
+        }
+        temp = temp->sig;
+    }
+    return false;
+}
+
+void insertarCarta(int id, string nombre, string rareza, string tipo,
+                   int costoElixir, double dañoBase, int vidaBase) {
+
+    if (existeCarta(id)) {
+        cout << "Error: Ya existe una carta con el ID " << id << endl;
+
+    } else if (costoElixir <= 0) {
+        cout << "Error: El costo de elixir debe ser mayor a 0" << endl;
+
+    } else if (dañoBase < 0) {
+        cout << "Error: El daño base no puede ser negativo" << endl;
+
+    } else if (vidaBase <= 0) {
+        cout << "Error: La vida base debe ser mayor a 0" << endl;
+
+    } else {
+        Cartas* nueva = new Cartas(id, nombre, rareza, tipo, costoElixir, dañoBase, vidaBase);
+
+// Inserción al inicio
+        nueva->sig = primerCarta;
+        primerCarta = nueva;
+
+        cout << "Carta '" << nombre << "' insertada correctamente." << endl;
+    }
+}
+
+
+// FUNCIONES DE ARENAS (Lista simple - inserción al inicio)
+
+
+// Vver si existe arena con ese ID
+bool existeArena(int id) {
+    Arenas* temp = primerArena;
+    while (temp != NULL) {
+        if (temp->IDArena == id) {
+            return true;
+        }
+        temp = temp->sig;
+    }
+    return false;
+}
+
+void insertarArena(int id, string nombre, int trofeosMin, int trofeosMax) {
+
+    if (existeArena(id)) {
+        cout << "Error: Ya existe una arena con el ID " << id << endl;
+
+    } else if (trofeosMin < 0) {
+        cout << "Error: El mínimo de trofeos no puede ser negativo" << endl;
+
+    } else if (trofeosMax <= trofeosMin) {
+        cout << "Error: El máximo de trofeos debe ser mayor al mínimo" << endl;
+
+    } else {
+        Arenas* nueva = new Arenas(id, nombre, trofeosMin, trofeosMax);
+
+// Inserción al inicio
+        nueva->sig = primerArena;
+        primerArena = nueva;
+
+        cout << "Arena '" << nombre << "' insertada correctamente" << endl;
+    }
+}
+
+//main para ver si funciona
+int main() {
+    cout << "Sistema Clash Royale iniciado" << endl;
+    return 0;
+}
