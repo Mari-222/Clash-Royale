@@ -1,1 +1,1 @@
-# Clas-Royale
+# Clash-Royale
