@@ -510,6 +510,7 @@ void insertarBatalla(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, 
         primerBatalla = nuevaBatalla;
         nuevaBatalla->sig = primerBatalla; // lo cambié porque en listas circulares el primer nodo debe apuntar a sí mismo
         nuevaBatalla->ant = primerBatalla; 
+        return;
     }
 
     Batallas *temp = primerBatalla;
