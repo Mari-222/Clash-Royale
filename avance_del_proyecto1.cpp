@@ -12,6 +12,7 @@ struct Cartas{
     int costoElixir;
     double dañoBase;
     int vidaBase;
+    int vecesUsada;//lo adicional para ver las cant de cartas mas usadas
 
     Cartas *sig;
 
@@ -23,6 +24,8 @@ struct Cartas{
         costoElixir = ce;
         dañoBase = db; 
         vidaBase = vb;
+        vecesUsada = 0;
+        
         sig = NULL;
     }
 }*primerCarta;
@@ -153,11 +156,25 @@ struct Batallas{
     int coronasJ2;
     float duracion;
     int IDArena;
-    string fecha; //investigar como almacenar la fecha de manera eficiente
+    string fecha; //hay qu elamacenar la fecha todavia
+    
+
+
+    // ===== ESTADISTICAS DEL MAZO (OPCIONAL DEL DOC) =====
+    double promedioElixirJ1, promedioElixirJ2;
+    string tipoMazoJ1, tipoMazoJ2;
+    double consumoElixirJ1, consumoElixirJ2;
+
+
+
+
+
+
 
     Batallas *sig, *ant;
 
-    Batallas(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, int cJ1, int cJ2, float d, int IDA, string f){
+    Batallas(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, int cJ1, int cJ2, float d, int IDA, string f,double pe1, double pe2, string t1, string t2,
+         double ce1, double ce2){//se agregan las funciones de estadisticas del mazo(la opcional)
         IDBatalla = IDB;
         IDJugador1 = IDJ1;
         IDJugador2 = IDJ2;
@@ -169,6 +186,16 @@ struct Batallas{
         duracion = d;
         IDArena = IDA;
         fecha = f;
+
+        promedioElixirJ1 = pe1;//funciones de estadisticas 
+        promedioElixirJ2 = pe2;
+        tipoMazoJ1 = t1;
+        tipoMazoJ2 = t2;
+        consumoElixirJ1 = ce1;
+        consumoElixirJ2 = ce2;
+
+
+
         sig = NULL;
         ant = NULL;
     }
@@ -448,8 +475,10 @@ void insertarArena(int IDA, string nA, int tmin, int tmax){
 }
 
 //Insertar al final
-void insertarBatalla(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, int cJ1, int cJ2, float d, int IDA, string f){
-    // Validar que los datos de la batalla sean válidos
+void insertarBatalla(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, int cJ1, int cJ2, float d, int IDA, string f, double pe1, 
+double pe2, string t1, string t2,double ce1, double ce2){
+
+//Ver que los datos de batalla si existan o sean validos
     if (IDB < 0 || IDJ1 < 0 || IDJ2 < 0 || IDM1 < 0 || IDM2 < 0 || g.empty() || cJ1 < 0 || cJ2 < 0 || d < 0 || IDA < 0 || f.empty()) {
         cout << "Error: Datos de la batalla no válidos. Por favor, intente de nuevo." << endl;
         return;
@@ -504,7 +533,7 @@ void insertarBatalla(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, 
         return;
     }
 
-    Batallas *nuevaBatalla = new Batallas(IDB, IDJ1, IDJ2, IDM1, IDM2, g, cJ1, cJ2, d, IDA, f);
+    Batallas *nuevaBatalla = new Batallas(IDB, IDJ1, IDJ2, IDM1, IDM2, g, cJ1, cJ2, d, IDA, f,pe1, pe2, t1, t2, ce1, ce2);
     //si la lista está vacia
     if(primerBatalla == NULL){
         primerBatalla = nuevaBatalla;
@@ -1600,6 +1629,30 @@ void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string 
         duracion = 4.0;
     }
 
+
+
+
+
+
+
+
+    // CONTAR USO DE CARTAS
+    NodoCartaMazo* tempC = m1->listaCartas;
+    while (tempC != NULL) {
+        Cartas* c = buscarCarta(tempC->IDCarta);
+        if (c != NULL) c->vecesUsada++;
+        tempC = tempC->sig;
+    }
+
+    tempC = m2->listaCartas;
+    while (tempC != NULL) {
+        Cartas* c = buscarCarta(tempC->IDCarta);
+        if (c != NULL) c->vecesUsada++;
+        tempC = tempC->sig;
+    }
+
+
+
     //RESUMEN DE BATTALLA siempre antes de registrarla-----------------------------------------------------------------------------
     cout << "\n========================================" << endl;
     cout << "       RESULTADO DE LA SIMULACION       " << endl;
@@ -1647,11 +1700,46 @@ void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string 
         } while (temp != primerBatalla);
     }
 
-    insertarBatalla(nuevoID, IDJ1, IDJ2, IDM1, IDM2, ganador,
-                    coronasJ1, coronasJ2, duracion, IDArena, fecha);
+    insertarBatalla(nuevoID, IDJ1, IDJ2, IDM1, IDM2, ganador,coronasJ1, coronasJ2, duracion, IDArena, fecha,elixirJ1, elixirJ2, tipoJ1, tipoJ2,
+ciclosJ1, ciclosJ2);
 
     cout << "Batalla registrada con ID: " << nuevoID << endl;
 }
+
+
+
+void mostrarCartasMasUsadas() {//cartas mas usadas (extra)
+    if (primerCarta == NULL) {
+        cout << "No hay cartas registradas." << endl;
+        return;
+    }
+    int maxUso = 0;
+    Cartas* temp = primerCarta;
+
+    // Encontrar el máximo uso
+    while (temp != NULL) {
+        if (temp->vecesUsada > maxUso)
+            maxUso = temp->vecesUsada;
+        temp = temp->sig;
+    }
+    if (maxUso==0) {
+        cout << "Aun no se han usado cartas en batallas." << endl;
+        return;
+    }
+    cout << "\n=== CARTAS MAS USADAS ===" << endl;
+    temp = primerCarta;
+    while (temp!=NULL) {
+        if (temp->vecesUsada == maxUso) {
+            cout << "Carta: " << temp->Nombre
+                 << " | Usos: " << temp->vecesUsada << endl;
+        }
+        temp = temp->sig;
+    }
+}
+
+
+
+
 
 
 // ============================================================
@@ -1664,7 +1752,8 @@ void menuSimulacion() {
         cout << "        SIMULACION DE BATALLAS          " << endl;
         cout << "========================================" << endl;
         cout << " 1. Simular nueva batalla" << endl;
-        cout << " 2. Volver al menu principal" << endl;
+        cout << " 2. Ver cartas mas usadas" << endl;        
+        cout << " 3. Volver al menu principal" << endl;
         cout << "========================================" << endl;
         cout << "Seleccione una opcion: ";
         cin >> opcion;
@@ -1694,14 +1783,22 @@ void menuSimulacion() {
                 break;
             }
             case 2:
+                mostrarCartasMasUsadas();
+                break;
+
+            case 3:
                 cout << "Volviendo al menu principal..." << endl;
                 break;
             default:
                 cout << "Opcion no valida. Intente de nuevo." << endl;
         }
 
-    } while (opcion != 2);
+    } while (opcion != 3);
 }
+
+
+
+
 
 
 
@@ -2163,8 +2260,7 @@ void menuBatallas() {
                 cout << "Fecha (AAAA-MM-DD): ";
                 getline(cin, fecha);
 
-                insertarBatalla(id, idJ1, idJ2, idM1, idM2, ganador,
-                                cJ1, cJ2, duracion, idArena, fecha);
+                insertarBatalla(id, idJ1, idJ2, idM1, idM2, ganador,cJ1, cJ2, duracion, idArena, fecha);
                 break;
             }
             case 2: {
@@ -2223,6 +2319,9 @@ void menuMantenimiento() {
 
     } while (opcion != 7);
 }
+
+
+
 
 
 // ============================================================
