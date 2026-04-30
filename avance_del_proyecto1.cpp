@@ -1345,3 +1345,550 @@ void cargarDatos(){
     insertarBatalla(9, 8, 9, 8, 9, "Ivan", 2, 3, 3.0, 7, "2026-04-09");
     insertarBatalla(10, 1, 10, 1, 10, "Alejandro", 3, 2, 2.6, 8, "2026-04-10");
 }
+
+
+
+
+
+
+/*-----------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------
+
+---------------------------------------------MENUS-----------------------------------------
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+*/
+// ============================================================
+// MENÚ CARTAS
+// ============================================================
+void menuCartas() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "         MANTENIMIENTO - CARTAS         " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Insertar carta" << endl;
+        cout << " 2. Modificar carta" << endl;
+        cout << " 3. Eliminar carta" << endl;
+        cout << " 4. Volver al menu anterior" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: {
+                cout << "\n--- Insertar Carta ---" << endl;
+                int id, costo, vida;
+                double daño;
+                string nombre, rareza, tipo;
+
+                cout << "ID de la carta: ";
+                cin >> id;
+                cin.ignore();
+                cout << "Nombre: ";
+                getline(cin, nombre);
+                cout << "Rareza (Comun/Rara/Epica/Legendaria): ";
+                getline(cin, rareza);
+                cout << "Tipo (Tropa/Hechizo/Edificio): ";
+                getline(cin, tipo);
+                cout << "Costo de elixir: ";
+                cin >> costo;
+                cout << "Daño base: ";
+                cin >> daño;
+                cout << "Vida base: ";
+                cin >> vida;
+
+                insertarCartas(id, nombre, rareza, tipo, costo, daño, vida);
+                break;
+            }
+            case 2: {
+                cout << "\n--- Modificar Carta ---" << endl;
+                int id;
+                cout << "ID de la carta a modificar: ";
+                cin >> id;
+                modificarCarta(id);
+                break;
+            }
+            case 3: {
+                cout << "\n--- Eliminar Carta ---" << endl;
+                int id;
+                cout << "ID de la carta a eliminar: ";
+                cin >> id;
+                eliminarCarta(id);
+                break;
+            }
+            case 4:
+                cout << "Volviendo al menu anterior..." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 4);
+}
+
+
+// ============================================================
+// MENÚ JUGADORES
+// ============================================================
+void menuJugadores() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "       MANTENIMIENTO - JUGADORES        " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Insertar jugador" << endl;
+        cout << " 2. Modificar jugador" << endl;
+        cout << " 3. Eliminar jugador" << endl;
+        cout << " 4. Volver al menu anterior" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: {
+                cout << "\n--- Insertar Jugador ---" << endl;
+                int id, nivel, trofeos, idArena, idClan;
+                string nombre;
+
+                cout << "ID del jugador: ";
+                cin >> id;
+                cin.ignore();
+                cout << "Nombre de usuario: ";
+                getline(cin, nombre);
+                cout << "Nivel del rey (1-15): ";
+                cin >> nivel;
+                cout << "Trofeos: ";
+                cin >> trofeos;
+                cout << "ID de arena: ";
+                cin >> idArena;
+                cout << "ID de clan (0 si no pertenece a ninguno): ";
+                cin >> idClan;
+
+                insertarJugador(id, nombre, nivel, trofeos, idArena, idClan);
+                break;
+            }
+            case 2: {
+                cout << "\n--- Modificar Jugador ---" << endl;
+                int id;
+                cout << "ID del jugador a modificar: ";
+                cin >> id;
+                modificarJugador(id);
+                break;
+            }
+            case 3: {
+                cout << "\n--- Eliminar Jugador ---" << endl;
+                int id;
+                cout << "ID del jugador a eliminar: ";
+                cin >> id;
+                eliminarJugador(id);
+                break;
+            }
+            case 4:
+                cout << "Volviendo al menu anterior..." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 4);
+}
+
+
+// ============================================================
+// MENÚ MAZOS
+// ============================================================
+void menuMazos() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "         MANTENIMIENTO - MAZOS          " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Insertar mazo" << endl;
+        cout << " 2. Agregar carta a mazo" << endl;
+        cout << " 3. Modificar mazo" << endl;
+        cout << " 4. Eliminar mazo" << endl;
+        cout << " 5. Eliminar carta de mazo" << endl;
+        cout << " 6. Volver al menu anterior" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: {
+                cout << "\n--- Insertar Mazo ---" << endl;
+                int id, idJugador;
+                string nombre, tipo;
+
+                cout << "ID del mazo: ";
+                cin >> id;
+                cin.ignore();
+                cout << "Nombre del mazo: ";
+                getline(cin, nombre);
+                cout << "Tipo del mazo: ";
+                getline(cin, tipo);
+                cout << "ID del jugador dueño: ";
+                cin >> idJugador;
+
+                insertarMazo(id, nombre, tipo, idJugador);
+                break;
+            }
+            case 2: {
+                cout << "\n--- Agregar Carta a Mazo ---" << endl;
+                int idMazo, idCarta;
+                cout << "ID del mazo: ";
+                cin >> idMazo;
+                cout << "ID de la carta a agregar: ";
+                cin >> idCarta;
+                insertarCartaEnMazo(idMazo, idCarta);
+                break;
+            }
+            case 3: {
+                cout << "\n--- Modificar Mazo ---" << endl;
+                int id;
+                cout << "ID del mazo a modificar: ";
+                cin >> id;
+                modificarMazo(id);
+                break;
+            }
+            case 4: {
+                cout << "\n--- Eliminar Mazo ---" << endl;
+                int id;
+                cout << "ID del mazo a eliminar: ";
+                cin >> id;
+                eliminarMazo(id);
+                break;
+            }
+            case 5: {
+                cout << "\n--- Eliminar Carta de Mazo ---" << endl;
+                int idMazo, idCarta;
+                cout << "ID del mazo: ";
+                cin >> idMazo;
+                cout << "ID de la carta a eliminar: ";
+                cin >> idCarta;
+                eliminarCartaDeMazo(idMazo, idCarta);
+                break;
+            }
+            case 6:
+                cout << "Volviendo al menu anterior..." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 6);
+}
+
+
+// ============================================================
+// MENU CLANES
+// ============================================================
+void menuClanes() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "         MANTENIMIENTO - CLANES         " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Insertar clan" << endl;
+        cout << " 2. Agregar jugador a clan" << endl;
+        cout << " 3. Modificar clan" << endl;
+        cout << " 4. Eliminar clan" << endl;
+        cout << " 5. Eliminar jugador de clan" << endl;
+        cout << " 6. Volver al menu anterior" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: {
+                cout << "\n--- Insertar Clan ---" << endl;
+                int id, miembros;
+                double puntaje;
+                string nombre, region;
+
+                cout << "ID del clan: ";
+                cin >> id;
+                cin.ignore();
+                cout << "Nombre del clan: ";
+                getline(cin, nombre);
+                cout << "Region: ";
+                getline(cin, region);
+                cout << "Cantidad de miembros: ";
+                cin >> miembros;
+                cout << "Puntaje del clan: ";
+                cin >> puntaje;
+
+                insertarClan(id, nombre, region, miembros, puntaje);
+                break;
+            }
+            case 2: {
+                cout << "\n--- Agregar Jugador a Clan ---" << endl;
+                int idClan, idJugador;
+                cout << "ID del clan: ";
+                cin >> idClan;
+                cout << "ID del jugador: ";
+                cin >> idJugador;
+                insertarJugadorEnClan(idClan, idJugador);
+                break;
+            }
+            case 3: {
+                cout << "\n--- Modificar Clan ---" << endl;
+                int id;
+                cout << "ID del clan a modificar: ";
+                cin >> id;
+                modificarClan(id);
+                break;
+            }
+            case 4: {
+                cout << "\n--- Eliminar Clan ---" << endl;
+                int id;
+                cout << "ID del clan a eliminar: ";
+                cin >> id;
+                eliminarClan(id);
+                break;
+            }
+            case 5: {
+                cout << "\n--- Eliminar Jugador de Clan ---" << endl;
+                int idClan, idJugador;
+                cout << "ID del clan: ";
+                cin >> idClan;
+                cout << "ID del jugador a eliminar: ";
+                cin >> idJugador;
+                eliminarJugadorDeClan(idClan, idJugador);
+                break;
+            }
+            case 6:
+                cout << "Volviendo al menu anterior..." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 6);
+}
+
+
+// ============================================================
+// MENU ARENAS
+// ============================================================
+void menuArenas() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "         MANTENIMIENTO - ARENAS         " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Insertar arena" << endl;
+        cout << " 2. Modificar arena" << endl;
+        cout << " 3. Eliminar arena" << endl;
+        cout << " 4. Volver al menu anterior" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: {
+                cout << "\n--- Insertar Arena ---" << endl;
+                int id, tmin, tmax;
+                string nombre;
+
+                cout << "ID de la arena: ";
+                cin >> id;
+                cin.ignore();
+                cout << "Nombre de la arena: ";
+                getline(cin, nombre);
+                cout << "Trofeos minimos: ";
+                cin >> tmin;
+                cout << "Trofeos maximos: ";
+                cin >> tmax;
+
+                insertarArena(id, nombre, tmin, tmax);
+                break;
+            }
+            case 2: {
+                cout << "\n--- Modificar Arena ---" << endl;
+                int id;
+                cout << "ID de la arena a modificar: ";
+                cin >> id;
+                modificarArena(id);
+                break;
+            }
+            case 3: {
+                cout << "\n--- Eliminar Arena ---" << endl;
+                int id;
+                cout << "ID de la arena a eliminar: ";
+                cin >> id;
+                eliminarArena(id);
+                break;
+            }
+            case 4:
+                cout << "Volviendo al menu anterior..." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 4);
+}
+
+
+// ============================================================
+// MENU BATALLAS
+// ============================================================
+void menuBatallas() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "        MANTENIMIENTO - BATALLAS        " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Registrar batalla" << endl;
+        cout << " 2. Eliminar batalla" << endl;
+        cout << " 3. Volver al menu anterior" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: {
+                cout << "\n--- Registrar Batalla ---" << endl;
+                int id, idJ1, idJ2, idM1, idM2, cJ1, cJ2, idArena;
+                float duracion;
+                string ganador, fecha;
+
+                cout << "ID de la batalla: ";
+                cin >> id;
+                cout << "ID jugador 1: ";
+                cin >> idJ1;
+                cout << "ID jugador 2: ";
+                cin >> idJ2;
+                cout << "ID mazo jugador 1: ";
+                cin >> idM1;
+                cout << "ID mazo jugador 2: ";
+                cin >> idM2;
+                cin.ignore();
+                cout << "Nombre del ganador: ";
+                getline(cin, ganador);
+                cout << "Coronas jugador 1 (0-3): ";
+                cin >> cJ1;
+                cout << "Coronas jugador 2 (0-3): ";
+                cin >> cJ2;
+                cout << "Duracion (minutos): ";
+                cin >> duracion;
+                cout << "ID de arena: ";
+                cin >> idArena;
+                cin.ignore();
+                cout << "Fecha (AAAA-MM-DD): ";
+                getline(cin, fecha);
+
+                insertarBatalla(id, idJ1, idJ2, idM1, idM2, ganador,
+                                cJ1, cJ2, duracion, idArena, fecha);
+                break;
+            }
+            case 2: {
+                cout << "\n--- Eliminar Batalla ---" << endl;
+                int id;
+                cout << "ID de la batalla a eliminar: ";
+                cin >> id;
+                eliminarBatalla(id);
+                break;
+            }
+            case 3:
+                cout << "Volviendo al menu anterior..." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 3);
+}
+
+
+// ============================================================
+// MENU MANTENIMIENTO
+// ============================================================
+void menuMantenimiento() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "           MENU MANTENIMIENTO           " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Cartas" << endl;
+        cout << " 2. Jugadores" << endl;
+        cout << " 3. Mazos" << endl;
+        cout << " 4. Clanes" << endl;
+        cout << " 5. Arenas" << endl;
+        cout << " 6. Batallas" << endl;
+        cout << " 7. Volver al menu principal" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: menuCartas();      break;
+            case 2: menuJugadores();   break;
+            case 3: menuMazos();       break;
+            case 4: menuClanes();      break;
+            case 5: menuArenas();      break;
+            case 6: menuBatallas();    break;
+            case 7:
+                cout << "Volviendo al menu principal..." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 7);
+}
+
+
+// ============================================================
+// MENÚ PRINCIPAL
+// ============================================================
+void menuPrincipal() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "    SISTEMA CLASH ROYALE - TEC 2026     " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Mantenimiento" << endl;
+        cout << " 2. Consultas" << endl;
+        cout << " 3. Reportes" << endl;
+        cout << " 4. Simulacion de batallas" << endl;
+        cout << " 5. Salir" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: menuMantenimiento(); break;
+            case 2: cout << "(Consultas - por implementar)" << endl; break;
+            case 3: cout << "(Reportes - por implementar)"  << endl; break;
+            case 4: cout << "(Simulacion - por implementar)" << endl; break;
+            case 5: cout << "\nHasta luego!" << endl; break;
+            default: cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 5);
+}
+
+
+// ============================================================
+// MAIN
+// ============================================================
+int main() {
+    cargarDatos();
+    menuPrincipal();
+    return 0;
+}
