@@ -1351,6 +1351,379 @@ void cargarDatos(){
 
 
 
+
+/*-----------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------
+
+------------------------------------------SIMULACION DE PARTIDAS -----------------------------------------
+
+----------------------------------------------------------------------------------------------------*/
+
+
+// ============================================================
+// SIMULACIÓN DE BATALLAS
+// Lógica inspirada en Clash Royale:
+// - Poder de ataque = suma de dañoBase de las 8 cartas del mazo
+// - Poder de defensa = suma de vidaBase de las 8 cartas del mazo
+// - Costo promedio = suma de costoElixir / 8
+// - Tipo predominante = tipo que más aparece entre las 8 cartas
+// - Ganador: se calcula con poderJ = dañoTotal - (vidaRival * 0.3)
+//   simulando que el daño del mazo debe "atravesar" la vida del rival
+// - Coronas:
+//   > 40% de diferencia de poder= 3 coronas (arrasó)
+//   > 20% de diferencia de poder= 2 coronas (victoria clara)
+//   <= 20% de diferencia de poder= 1 corona (batalla ajustada)
+// - Duración simulada según resultado:
+//   3 coronas = 1.5 a 2.5 min (victoria rápida)
+//   2 coronas = 2.5 a 3.5 min (victoria normal)
+//   1 corona  = 3.5 a 4.0 min (prórroga, batalla muy pareja)
+// ============================================================
+
+
+
+// ------------------------------------------------------------
+//DañoTotal que representa el poder ofensivo del mazo
+// ------------------------------------------------------------
+double calcularDañoTotal(Mazos* mazo) {
+    double total = 0;
+    NodoCartaMazo* temp = mazo->listaCartas;
+    while (temp != NULL) {
+        Cartas* carta = buscarCarta(temp->IDCarta);
+        if (carta != NULL) {
+            total += carta->dañoBase;
+        }
+        temp = temp->sig;
+    }
+    return total;
+}
+
+// ------------------------------------------------------------
+// Calcula la vida total sumando vidaBase de las 8 cartas
+// del mazo. Representa el poder defensivo del mazo.
+// ------------------------------------------------------------
+int calcularVidaTotal(Mazos* mazo) {
+    int total = 0;
+    NodoCartaMazo* temp=mazo->listaCartas;
+    while (temp!=NULL) {
+        Cartas*carta=buscarCarta(temp->IDCarta);
+        if (carta!=NULL) {
+            total+=carta->vidaBase;
+        }
+        temp=temp->sig;
+    }
+    return total;
+}
+
+// ------------------------------------------------------------
+// Promedio de elixir
+// ------------------------------------------------------------
+double calcularPromedioElixir(Mazos* mazo) {
+    int totalElixir = 0;
+    int cantidad = 0;
+    NodoCartaMazo* temp = mazo->listaCartas;
+    while (temp != NULL) {
+        Cartas* carta = buscarCarta(temp->IDCarta);
+        if (carta != NULL) {
+            totalElixir += carta->costoElixir;
+            cantidad++;
+        }
+        temp = temp->sig;
+    }
+    if (cantidad == 0) return 0;
+    return (double)totalElixir / cantidad;
+}
+
+/* ------------------------------------------------------------
+ Tipo Predominante según sean las cartas Tropa, Hechizo o Edificio
+ el que mas aparece define el estilo del mazo
+ ------------------------------------------------------------*/
+string calcularTipoPredominante(Mazos* mazo) {
+    int tropas = 0, hechizos = 0, edificios = 0;
+    NodoCartaMazo* temp = mazo->listaCartas;
+
+    while (temp != NULL) {
+        Cartas* carta = buscarCarta(temp->IDCarta);
+        if (carta != NULL) {
+            string tipo = carta->Tipo;
+            if (tipo=="Tropa" ||tipo=="tropa")tropas++;//por si la escriben en minuscula o mayuscula
+            if (tipo=="Hechizo"||tipo=="hechizo")hechizos++;
+            if (tipo=="Edificio"||tipo=="edificio")edificios++;
+        }
+        temp=temp->sig;
+    }
+
+    if (tropas >= hechizos && tropas >= edificios)    return "Tropa";
+    if (hechizos >= tropas && hechizos >= edificios)  return "Hechizo";
+    return "Edificio";//como en intro
+}
+
+// ------------------------------------------------------------
+// total de elixir, aprox 24 por minuto 
+
+// ------------------------------------------------------------
+double calcularConsumoDElixir(Mazos* mazo) {//usamos double porque es un promedio 
+    double promedio = calcularPromedioElixir(mazo);
+    if (promedio == 0) return 0;
+    double elixirTotal=72;//elixir promedio en clash cada 3 min
+    double ciclos=elixirTotal/(promedio*8);//ciclo completo
+    return ciclos;
+}
+
+// ------------------------------------------------------------
+//funcion principal con ID, mazos y arena
+// Calcula el resultado y registra la batalla automáticamente
+// ------------------------------------------------------------
+void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string fecha) {
+    Jugadores* j1 = buscarJugador(IDJ1);//para validar que existen los juigadores 
+    Jugadores* j2 = buscarJugador(IDJ2);
+    if (j1 == NULL) {
+        cout << "Error: No existe el jugador 1 con ID " << IDJ1 << "." << endl;
+        return;
+    }
+    if (j2 == NULL) {
+        cout << "Error: No existe el jugador 2 con ID " << IDJ2 << "." << endl;
+        return;
+    }
+    if (IDJ1 == IDJ2) {
+        cout << "Error: Un jugador no puede batallar contra sí mismo." << endl;
+        return;
+    }
+
+    Mazos* m1 = buscarMazo(IDM1);//qu esi existan los mazos y sean de esos mismos jugadores 
+    Mazos* m2 = buscarMazo(IDM2);
+    if (m1 == NULL) {
+        cout << "Error: No existe el mazo 1 con ID " << IDM1 << "." << endl;
+        return;
+    }
+    if (m2 == NULL) {
+        cout << "Error: No existe el mazo 2 con ID " << IDM2 << "." << endl;
+        return;
+    }
+    if (m1->IDJugador != IDJ1) {
+        cout << "Error: El mazo " << IDM1 << " no pertenece al jugador " << IDJ1 << "." << endl;
+        return;
+    }
+    if (m2->IDJugador != IDJ2) {
+        cout << "Error: El mazo " << IDM2 << " no pertenece al jugador " << IDJ2 << "." << endl;
+        return;
+    }
+    if (m1->cantidadCartas != 8 || m2->cantidadCartas != 8) {
+        cout << "Error: Ambos mazos deben tener exactamente 8 cartas." << endl;
+        return;
+    }
+
+    Arenas* arena = buscarArena(IDArena);//que si exsta la arena 
+    if (arena == NULL) {
+        cout << "Error: No existe una arena con ID " << IDArena << "." << endl;
+        return;
+    }
+
+    // ================================================================
+    // CÁLCULO DE ESTADÍSTICAS DE CADA MAZO
+    // ================================================================
+
+    // Poder ofensivo: suma de daño de las 8 cartas
+    double dañoJ1 = calcularDañoTotal(m1);
+    double dañoJ2 = calcularDañoTotal(m2);
+
+    // Poder defensivo: suma de vida de las 8 cartas
+    int vidaJ1 = calcularVidaTotal(m1);
+    int vidaJ2 = calcularVidaTotal(m2);
+
+    // Costo promedio de elixir
+    double elixirJ1 = calcularPromedioElixir(m1);
+    double elixirJ2 = calcularPromedioElixir(m2);
+
+    // Tipo predominante del mazo
+    string tipoJ1 = calcularTipoPredominante(m1);
+    string tipoJ2 = calcularTipoPredominante(m2);
+
+    // Ciclos de elixir estimados
+    double ciclosJ1 = calcularConsumoDElixir(m1);
+    double ciclosJ2 = calcularConsumoDElixir(m2);
+
+    /* ================================================================
+    // ENCOnTRAR GANADOR
+    // poderJ=dañoPropio-(vidaRival * 0.3) tiene qye haber un 30% de daño hacaia el otro 
+    el.3 sería la defensa que lo afecta del otro jugador */
+    double poderJ1=dañoJ1-(vidaJ2 *0.3);
+    double poderJ2=dañoJ2-(vidaJ1*0.3);
+
+    // ================================================================
+    // CÁLCULO DE CORONAS
+    // Diferencia > 40%: 3 coronas (arrasó al rival)
+    // Diferencia > 20%: 2 coronas (victoria clara)
+    // <= 20%: 1 corona  (batalla muy ajustada / prórroga)
+    // Si los poderes son iguales o muy cercanos → empate (0 coronas c/u)
+    // ================================================================
+    int coronasJ1 = 0, coronasJ2 = 0;
+    string ganador;
+    float duracion;
+
+    double maxPoder=(poderJ1 > poderJ2) ? poderJ1 : poderJ2;// un trie que clacula dofenrecia con el mayor poder 
+    double diferencia=0;
+    if (maxPoder>0) {
+        diferencia=((poderJ1 > poderJ2)? (poderJ1 - poderJ2): (poderJ2 - poderJ1)) / maxPoder * 100.0;// trie
+    }
+
+    if (poderJ1 > poderJ2) {
+        // J1 gana
+        ganador = j1->nombreUsuario;
+        if (diferencia > 40) {
+            coronasJ1 = 3; coronasJ2 = 0;
+            duracion = 1.5 + ((float)(IDJ1 % 10) / 10.0); // entre 1.5 y 2.5
+        } else if (diferencia > 20) {
+            coronasJ1 = 2; coronasJ2 = 1;
+            duracion = 2.5 + ((float)(IDJ1 % 10) / 10.0); // entre 2.5 y 3.5
+        } else {
+            coronasJ1 = 2; coronasJ2 = 1;
+            duracion = 3.5 + ((float)(IDJ1 % 5) / 10.0);  // entre 3.5 y 4.0
+        }
+    } else if (poderJ2 > poderJ1) {
+        // J2 gana
+        ganador = j2->nombreUsuario;
+        if (diferencia > 40) {
+            coronasJ2 = 3; coronasJ1 = 0;
+            duracion = 1.5 + ((float)(IDJ2 % 10) / 10.0);
+        } else if (diferencia > 20) {
+            coronasJ2 = 2; coronasJ1 = 1;
+            duracion = 2.5 + ((float)(IDJ2 % 10) / 10.0);
+        } else {
+            coronasJ2 = 2; coronasJ1 = 1;
+            duracion = 3.5 + ((float)(IDJ2 % 5) / 10.0);
+        }
+    } else {
+        //Si es que empatan con mismos puntos en todo
+        ganador = "Empate";
+        coronasJ1 = 1; coronasJ2 = 1;
+        duracion = 4.0;
+    }
+
+    //RESUMEN DE BATTALLA siempre antes de registrarla-----------------------------------------------------------------------------
+    cout << "\n========================================" << endl;
+    cout << "       RESULTADO DE LA SIMULACION       " << endl;
+    cout << "========================================" << endl;
+    cout << "Arena: " << arena->nombreArena << endl;
+    cout << "Fecha: " << fecha << endl;
+    cout << "----------------------------------------" << endl;
+
+    cout << "\n[JUGADOR 1] " << j1->nombreUsuario << " - Mazo: " << m1->nombreMazo << endl;
+    cout << "  Daño total del mazo   : " << dañoJ1 << endl;
+    cout << "  Vida total del mazo   : " << vidaJ1 << endl;
+    cout << "  Promedio de elixir    : " << elixirJ1 << endl;
+    cout << "  Tipo predominante     : " << tipoJ1 << endl;
+    cout << "  Ciclos de elixir est. : " << ciclosJ1 << endl;
+    cout << "  Poder calculado       : " << poderJ1 << endl;
+
+    cout << "\n[JUGADOR 2] " << j2->nombreUsuario << " - Mazo: " << m2->nombreMazo << endl;
+    cout << "  Daño total del mazo   : " << dañoJ2 << endl;
+    cout << "  Vida total del mazo   : " << vidaJ2 << endl;
+    cout << "  Promedio de elixir    : " << elixirJ2 << endl;
+    cout << "  Tipo predominante     : " << tipoJ2 << endl;
+    cout << "  Ciclos de elixir est. : " << ciclosJ2 << endl;
+    cout << "  Poder calculado       : " << poderJ2 << endl;
+
+    cout << "\n----------------------------------------" << endl;
+    cout << "  Diferencia de poder   : " << diferencia << "%" << endl;
+    cout << "  Ganador               : " << ganador << endl;
+    cout << "  Coronas " << j1->nombreUsuario << " : " << coronasJ1 << endl;
+    cout << "  Coronas " << j2->nombreUsuario << " : " << coronasJ2 << endl;
+    cout << "  Duracion simulada     : " << duracion << " min" << endl;
+    cout << "========================================" << endl;
+
+
+// REGISTRAR LA BATALLA EN LA LISTA
+// Se genera un ID automático buscando el mayor ID existente+1
+
+    int nuevoID = 1;
+    if (primerBatalla != NULL) {
+        Batallas* temp = primerBatalla;
+        do {
+            if (temp->IDBatalla >= nuevoID) {
+                nuevoID = temp->IDBatalla + 1;
+            }
+            temp = temp->sig;
+        } while (temp != primerBatalla);
+    }
+
+    insertarBatalla(nuevoID, IDJ1, IDJ2, IDM1, IDM2, ganador,
+                    coronasJ1, coronasJ2, duracion, IDArena, fecha);
+
+    cout << "Batalla registrada con ID: " << nuevoID << endl;
+}
+
+
+// ============================================================
+// MENÚ DE SIMULACIÓN
+// ============================================================
+void menuSimulacion() {
+    int opcion;
+    do {
+        cout << "\n========================================" << endl;
+        cout << "        SIMULACION DE BATALLAS          " << endl;
+        cout << "========================================" << endl;
+        cout << " 1. Simular nueva batalla" << endl;
+        cout << " 2. Volver al menu principal" << endl;
+        cout << "========================================" << endl;
+        cout << "Seleccione una opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1: {
+                cout << "\n--- Simular Batalla ---" << endl;
+                int idJ1, idJ2, idM1, idM2, idArena;
+                string fecha;
+
+                cout << "ID del jugador 1: ";
+                cin >> idJ1;
+                cout << "ID del jugador 2: ";
+                cin >> idJ2;
+                cout << "ID del mazo del jugador 1: ";
+                cin >> idM1;
+                cout << "ID del mazo del jugador 2: ";
+                cin >> idM2;
+                cout << "ID de la arena: ";
+                cin >> idArena;
+                cin.ignore();
+                cout << "Fecha (AAAA-MM-DD): ";
+                getline(cin, fecha);
+
+                simularBatalla(idJ1, idJ2, idM1, idM2, idArena, fecha);
+                break;
+            }
+            case 2:
+                cout << "Volviendo al menu principal..." << endl;
+                break;
+            default:
+                cout << "Opcion no valida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 2);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*-----------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------
