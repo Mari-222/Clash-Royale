@@ -2144,7 +2144,6 @@ void consultaBatallasPorArena() {
     }
 
     cout << "\n  Arena: " << a->nombreArena << endl;
-    cout << "----------------------------------------" << endl;
 
     if (!primerBatalla) {
         cout << "  No hay batallas registradas." << endl;
@@ -2191,7 +2190,6 @@ void consultaJugadoresDeClan() {
     }
 
     cout << "\n  Clan: " << clan->nombreClan << endl;
-    cout << "----------------------------------------" << endl;
 
     NodoJugadorClan *nj = clan->listaJugadores;
     if (!nj) {
@@ -2259,7 +2257,6 @@ void consultaMazosDeJugador() {
     }
 
     cout << "\n  Jugador: " << j->nombreUsuario << endl;
-    cout << "----------------------------------------" << endl;
 
     bool encontrado = false;
     Mazos *m = primerMazo;
