@@ -3034,23 +3034,37 @@ void menuConsultas() {
     int op;
     do {
         cout << "\n       CONSULTAS\n";
-        cout << "1. Carta mas usada\n";
-        cout << "2. Jugador con mas trofeos\n";
-        cout << "3. Clan con mas miembros\n";
-        cout << "4. Volver\n";
+        cout << "1.  Carta mas usada en mazos\n";
+        cout << "2.  Jugador con mas trofeos\n";
+        cout << "3.  Clan con mas miembros\n";
+        cout << "4.  Mazo con menor costo de elixir\n";
+        cout << "5.  Arena con mas jugadores\n";
+        cout << "6.  Jugador con mas victorias\n";
+        cout << "7.  Batallas por arena\n";
+        cout << "8.  Jugadores de un clan\n";
+        cout << "9.  Cartas legendarias\n";
+        cout << "10. Mazos de un jugador\n";
+        cout << "11. Volver\n";
         cout << "Seleccione: ";
         cin >> op;
-        cin.ignore(); 
+        cin.ignore();
 
         switch(op) {
-            case 1: cartaMasUsada(); break;
-            case 2: jugadorMasTrofeos(); break;
-            case 3: clanMasMiembros(); break;
-            case 4: break;
-            default: cout << "Opcion invalida\n"; break;
+            case 1:  consultaCartaMasUsada();       break;
+            case 2:  consultaJugadorMasTrofeos();   break;
+            case 3:  consultaClanMasMiembros();     break;
+            case 4:  consultaMazoCostoMenor();      break;
+            case 5:  consultaArenaMasJugadores();   break;
+            case 6:  consultaJugadorMasVictorias(); break;
+            case 7:  consultaBatallasPorArena();    break;
+            case 8:  consultaJugadoresDeClan();     break;
+            case 9:  consultaCartasLegendarias();   break;
+            case 10: consultaMazosDeJugador();      break;
+            case 11: break;
+            default: cout << "Opcion invalida\n";  break;
         }
 
-    } while(op != 4);
+    } while(op != 11);
 }
 // ============================================================
 // MENU MANTENIMIENTO
