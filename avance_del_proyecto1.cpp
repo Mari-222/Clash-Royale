@@ -770,7 +770,7 @@ void modificarJugador(int IDJ){
         return;
     }
 
-    // 🔴 MANEJO DE CAMBIO DE CLAN
+    // MANEJO DE CAMBIO DE CLAN
     if(temp->IDClan != nuevoIDClan){
         // quitar del clan anterior si tenía
         if(temp->IDClan != 0){
