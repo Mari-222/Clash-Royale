@@ -1893,10 +1893,10 @@ void menuSimulacion() {
 
 // 1. Carta más utilizada en todos los mazos
 void consultaCartaMasUsada() {
-    titulo("Carta mas utilizada en mazos");
+    cout << "\n=== Carta mas utilizada en mazos ===" << endl;
 
     if (!primerCarta) {
-        cout << "  No hay cartas registradas.\n";
+        cout << "  No hay cartas registradas." << endl;
         return;
     }
 
@@ -1928,24 +1928,24 @@ void consultaCartaMasUsada() {
     }
 
     if (mejorID == -1 || mejorCont == 0) {
-        cout << "  Ninguna carta esta en algun mazo.\n";
+        cout << "  Ninguna carta esta en algun mazo." << endl;
         return;
     }
 
     Cartas *res = buscarCarta(mejorID);
     if (res) {
-        cout << "  Carta: " << res->Nombre << " (ID: " << res->IDCarta << ")\n";
-        cout << "  Aparece en " << mejorCont << " mazo(s).\n";
+        cout << "  Carta: " << res->Nombre << " (ID: " << res->IDCarta << ")" << endl;
+        cout << "  Aparece en " << mejorCont << " mazo(s)." << endl;
     }
 }
 
 
 // 2. Jugador con más trofeos
 void consultaJugadorMasTrofeos() {
-    titulo("Jugador con mas trofeos");
+    cout << "\n=== Jugador con mas trofeos ===" << endl;
 
     if (!primerJugador) {
-        cout << "  No hay jugadores registrados.\n";
+        cout << "  No hay jugadores registrados." << endl;
         return;
     }
 
@@ -1958,24 +1958,24 @@ void consultaJugadorMasTrofeos() {
         t = t->sig;
     }
 
-    cout << "  Jugador : " << mejor->nombreUsuario << "\n";
-    cout << "  Trofeos : " << mejor->trofeos << "\n";
+    cout << "  Jugador : " << mejor->nombreUsuario << endl;
+    cout << "  Trofeos : " << mejor->trofeos << endl;
 }
 
 
 // 3. Clan con más miembros (lista circular)
 void consultaClanMasMiembros() {
-    titulo("Clan con mas miembros");
+    cout << "\n=== Clan con mas miembros ===" << endl;
 
     if (!primerClan) {
-        cout << "  No hay clanes registrados.\n";
+        cout << "  No hay clanes registrados." << endl;
         return;
     }
 
     // caso: un solo nodo
     if (primerClan->sig == primerClan) {
-        cout << "  Clan     : " << primerClan->nombreClan << "\n";
-        cout << "  Miembros : " << primerClan->cantidadMiembros << "\n";
+        cout << "  Clan     : " << primerClan->nombreClan << endl;
+        cout << "  Miembros : " << primerClan->cantidadMiembros << endl;
         return;
     }
 
@@ -1988,23 +1988,22 @@ void consultaClanMasMiembros() {
         t = t->sig;
     }
 
-    cout << "  Clan     : " << mejor->nombreClan << "\n";
-    cout << "  Miembros : " << mejor->cantidadMiembros << "\n";
+    cout << "  Clan     : " << mejor->nombreClan << endl;
+    cout << "  Miembros : " << mejor->cantidadMiembros << endl;
 }
 
 
 // 4. Mazo con menor costo promedio de elixir
 void consultaMazoCostoMenor() {
-    titulo("Mazo con menor costo promedio de elixir");
+    cout << "\n=== Mazo con menor costo promedio de elixir ===" << endl;
 
     if (!primerMazo) {
-        cout << "  No hay mazos registrados.\n";
+        cout << "  No hay mazos registrados." << endl;
         return;
     }
 
     Mazos *mejor = NULL;
     double menorProm = 999999;
-
     Mazos *m = primerMazo;
 
     while (m) {
@@ -2019,7 +2018,6 @@ void consultaMazoCostoMenor() {
             }
 
             double prom = suma / m->cantidadCartas;
-
             if (prom < menorProm) {
                 menorProm = prom;
                 mejor = m;
@@ -2029,27 +2027,26 @@ void consultaMazoCostoMenor() {
     }
 
     if (!mejor) {
-        cout << "  Ningun mazo tiene cartas.\n";
+        cout << "  Ningun mazo tiene cartas." << endl;
         return;
     }
 
-    cout << "  Mazo   : " << mejor->nombreMazo << " (ID: " << mejor->IDMazo << ")\n";
-    cout << "  Prom.  : " << menorProm << " de elixir\n";
+    cout << "  Mazo   : " << mejor->nombreMazo << " (ID: " << mejor->IDMazo << ")" << endl;
+    cout << "  Prom.  : " << menorProm << " de elixir" << endl;
 }
 
 
 // 5. Arena con más jugadores
 void consultaArenaMasJugadores() {
-    titulo("Arena con mas jugadores");
+    cout << "\n=== Arena con mas jugadores ===" << endl;
 
     if (!primerArena) {
-        cout << "  No hay arenas registradas.\n";
+        cout << "  No hay arenas registradas." << endl;
         return;
     }
 
     Arenas *mejor = NULL;
     int maxJ = -1;
-
     Arenas *a = primerArena;
 
     while (a) {
@@ -2070,27 +2067,26 @@ void consultaArenaMasJugadores() {
     }
 
     if (!mejor) {
-        cout << "  No se encontro arena.\n";
+        cout << "  No se encontro arena." << endl;
         return;
     }
 
-    cout << "  Arena    : " << mejor->nombreArena << " (ID: " << mejor->IDArena << ")\n";
-    cout << "  Jugadores: " << maxJ << "\n";
+    cout << "  Arena    : " << mejor->nombreArena << " (ID: " << mejor->IDArena << ")" << endl;
+    cout << "  Jugadores: " << maxJ << endl;
 }
 
 
 // 6. Jugador con más victorias
 void consultaJugadorMasVictorias() {
-    titulo("Jugador con mas victorias en batallas");
+    cout << "\n=== Jugador con mas victorias en batallas ===" << endl;
 
     if (!primerBatalla || !primerJugador) {
-        cout << "  No hay suficientes datos.\n";
+        cout << "  No hay suficientes datos." << endl;
         return;
     }
 
     Jugadores *mejor = NULL;
     int maxV = 0;
-
     Jugadores *j = primerJugador;
 
     while (j) {
@@ -2112,32 +2108,35 @@ void consultaJugadorMasVictorias() {
     }
 
     if (!mejor || maxV == 0) {
-        cout << "  Ningun jugador tiene victorias registradas.\n";
+        cout << "  Ningun jugador tiene victorias registradas." << endl;
         return;
     }
 
-    cout << "  Jugador  : " << mejor->nombreUsuario << "\n";
-    cout << "  Victorias: " << maxV << "\n";
+    cout << "  Jugador  : " << mejor->nombreUsuario << endl;
+    cout << "  Victorias: " << maxV << endl;
 }
 
 
 // 7. Batallas en una arena determinada
 void consultaBatallasPorArena() {
-    titulo("Batallas por arena");
+    cout << "\n=== Batallas por arena ===" << endl;
 
-    int IDA = leerEntero("  Ingrese el ID de la arena: ");
+    int IDA;
+    cout << "  Ingrese el ID de la arena: ";
+    cin >> IDA;
+    cin.ignore();
+
     Arenas *a = buscarArena(IDA);
-
     if (!a) {
-        cout << "  Error: No existe esa arena.\n";
+        cout << "  Error: No existe esa arena." << endl;
         return;
     }
 
-    cout << "\n  Arena: " << a->nombreArena << "\n";
-    separador();
+    cout << "\n  Arena: " << a->nombreArena << endl;
+    cout << "----------------------------------------" << endl;
 
     if (!primerBatalla) {
-        cout << "  No hay batallas registradas.\n";
+        cout << "  No hay batallas registradas." << endl;
         return;
     }
 
@@ -2153,38 +2152,39 @@ void consultaBatallasPorArena() {
                  << (j1 ? j1->nombreUsuario : "?") << " vs "
                  << (j2 ? j2->nombreUsuario : "?")
                  << " | Ganador: " << b->ganador
-                 << " | Fecha: " << b->fecha << "\n";
+                 << " | Fecha: " << b->fecha << endl;
 
             encontrado = true;
         }
-
         b = b->sig;
     } while (b != primerBatalla);
 
     if (!encontrado)
-        cout << "  No se encontraron batallas en esa arena.\n";
+        cout << "  No se encontraron batallas en esa arena." << endl;
 }
 
 
 // 8. Jugadores de un clan
 void consultaJugadoresDeClan() {
-    titulo("Jugadores de un clan");
+    cout << "\n=== Jugadores de un clan ===" << endl;
 
-    int IDC = leerEntero("  Ingrese el ID del clan: ");
+    int IDC;
+    cout << "  Ingrese el ID del clan: ";
+    cin >> IDC;
+    cin.ignore();
+
     Clanes *clan = buscarClan(IDC);
-
     if (!clan) {
-        cout << "  Error: No existe ese clan.\n";
+        cout << "  Error: No existe ese clan." << endl;
         return;
     }
 
-    cout << "\n  Clan: " << clan->nombreClan << "\n";
-    separador();
+    cout << "\n  Clan: " << clan->nombreClan << endl;
+    cout << "----------------------------------------" << endl;
 
     NodoJugadorClan *nj = clan->listaJugadores;
-
     if (!nj) {
-        cout << "  Sin miembros registrados.\n";
+        cout << "  Sin miembros registrados." << endl;
         return;
     }
 
@@ -2193,7 +2193,7 @@ void consultaJugadoresDeClan() {
         if (j) {
             cout << "  - " << j->nombreUsuario
                  << " (ID: " << j->IDJugador
-                 << ", Trofeos: " << j->trofeos << ")\n";
+                 << ", Trofeos: " << j->trofeos << ")" << endl;
         }
         nj = nj->sig;
     }
@@ -2202,7 +2202,7 @@ void consultaJugadoresDeClan() {
 
 // auxiliar para convertir a minusculas
 string toLower(string s) {
-    for (int i = 0; i < s.size(); i++) {
+    for (int i = 0; i < (int)s.size(); i++) {
         if (s[i] >= 'A' && s[i] <= 'Z')
             s[i] = s[i] + 32;
     }
@@ -2212,7 +2212,7 @@ string toLower(string s) {
 
 // 9. Cartas legendarias
 void consultaCartasLegendarias() {
-    titulo("Cartas de rareza Legendaria");
+    cout << "\n=== Cartas de rareza Legendaria ===" << endl;
 
     bool encontrado = false;
     Cartas *c = primerCarta;
@@ -2221,31 +2221,34 @@ void consultaCartasLegendarias() {
         if (toLower(c->Rareza) == "legendaria") {
             cout << "  - " << c->Nombre
                  << " (ID: " << c->IDCarta
-                 << ", Elixir: " << c->costoElixir << ")\n";
+                 << ", Elixir: " << c->costoElixir << ")" << endl;
             encontrado = true;
         }
         c = c->sig;
     }
 
     if (!encontrado)
-        cout << "  No hay cartas legendarias registradas.\n";
+        cout << "  No hay cartas legendarias registradas." << endl;
 }
 
 
 // 10. Mazos de un jugador
 void consultaMazosDeJugador() {
-    titulo("Mazos de un jugador");
+    cout << "\n=== Mazos de un jugador ===" << endl;
 
-    int IDJ = leerEntero("  Ingrese el ID del jugador: ");
+    int IDJ;
+    cout << "  Ingrese el ID del jugador: ";
+    cin >> IDJ;
+    cin.ignore();
+
     Jugadores *j = buscarJugador(IDJ);
-
     if (!j) {
-        cout << "  Error: No existe ese jugador.\n";
+        cout << "  Error: No existe ese jugador." << endl;
         return;
     }
 
-    cout << "\n  Jugador: " << j->nombreUsuario << "\n";
-    separador();
+    cout << "\n  Jugador: " << j->nombreUsuario << endl;
+    cout << "----------------------------------------" << endl;
 
     bool encontrado = false;
     Mazos *m = primerMazo;
@@ -2255,14 +2258,14 @@ void consultaMazosDeJugador() {
             cout << "  - " << m->nombreMazo
                  << " (ID: " << m->IDMazo
                  << ", Tipo: " << m->tipoMazo
-                 << ", Cartas: " << m->cantidadCartas << "/8)\n";
+                 << ", Cartas: " << m->cantidadCartas << "/8)" << endl;
             encontrado = true;
         }
         m = m->sig;
     }
 
     if (!encontrado)
-        cout << "  Este jugador no tiene mazos registrados.\n";
+        cout << "  Este jugador no tiene mazos registrados." << endl;
 }
 
 //REPORTES
