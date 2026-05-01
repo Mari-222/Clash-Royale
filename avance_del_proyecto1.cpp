@@ -608,8 +608,15 @@ void insertarJugadorEnClan(int IDClan, int IDJugador){
     }
 
     // Verificar que el jugador existe
-    if(buscarJugador(IDJugador) == NULL){
+    Jugadores *jugador = buscarJugador(IDJugador);
+    if(jugador == NULL){
         cout << "Error: No existe un jugador con ese ID." << endl;
+        return;
+    }
+
+    // Verificar que el jugador no esté en OTRO clan
+    if(jugador->IDClan != 0){
+        cout << "Error: El jugador ya pertenece a otro clan." << endl;
         return;
     }
 
@@ -634,7 +641,13 @@ void insertarJugadorEnClan(int IDClan, int IDJugador){
         }
         ultimo->sig = nuevoJugador;
     }
+
+    // actualizar relación en el jugador
+    jugador->IDClan = IDClan;
+
     clan->cantidadMiembros++;
+
+    cout << "Jugador agregado al clan correctamente." << endl;
 }
 
 
