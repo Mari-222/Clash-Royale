@@ -2265,26 +2265,270 @@ void consultaMazosDeJugador() {
         cout << "  Este jugador no tiene mazos registrados.\n";
 }
 
+//REPORTES
+// 1.Muestra todas las listas principales del sistema.
+
+void reporteTodasListas() {
+    titulo("REPORTE: Todas las listas");
+
+    // CARTAS
+    cout << "\n// CARTAS\n";
+    Cartas *c = primerCarta;
+    while (c) {
+        cout << c->Nombre << " | Elixir: " << c->costoElixir << "\n";
+        c = c->sig;
+    }
+
+    // JUGADORES
+    cout << "\n// JUGADORES\n";
+    Jugadores *j = primerJugador;
+    while (j) {
+        cout << j->nombreUsuario << " | Trofeos: " << j->trofeos << "\n";
+        j = j->sig;
+    }
+
+    // MAZOS
+    cout << "\n// MAZOS\n";
+    Mazos *m = primerMazo;
+    while (m) {
+        cout << m->nombreMazo << " | Cartas: " << m->cantidadCartas << "\n";
+        m = m->sig;
+    }
+
+    // CLANES (lista circular)
+    cout << "\n// CLANES\n";
+    if (primerClan) {
+        Clanes *cl = primerClan;
+        do {
+            cout << cl->nombreClan << " | Miembros: " << cl->cantidadMiembros << "\n";
+            cl = cl->sig;
+        } while (cl != primerClan);
+    }
+
+    // ARENAS
+    cout << "\n// ARENAS\n";
+    Arenas *a = primerArena;
+    while (a) {
+        cout << a->nombreArena << "\n";
+        a = a->sig;
+    }
+
+    // BATALLAS (lista circular)
+    cout << "\n// BATALLAS\n";
+    if (primerBatalla) {
+        Batallas *b = primerBatalla;
+        do {
+            cout << "Batalla " << b->IDBatalla << " | Ganador: " << b->ganador << "\n";
+            b = b->sig;
+        } while (b != primerBatalla);
+    }
+}
 
 
+//2.Muestra cada jugador con su arena, clan y mazos.
+
+void reporteDetalleJugadores() {
+    titulo("REPORTE: Detalle jugadores");
+
+    Jugadores *j = primerJugador;
+
+    while (j) {
+        // Buscar relaciones
+        Arenas *a = buscarArena(j->IDArena);
+        Clanes *cl = buscarClan(j->IDClan);
+
+        cout << "\nJugador: " << j->nombreUsuario << "\n";
+        cout << "Arena: " << (a ? a->nombreArena : "No") << "\n";
+        cout << "Clan: " << (cl ? cl->nombreClan : "No") << "\n";
+
+        // MAZOS DEL JUGADOR
+        cout << "// MAZOS\n";
+        Mazos *m = primerMazo;
+        while (m) {
+            if (m->IDJugador == j->IDJugador) {
+                cout << "- " << m->nombreMazo << "\n";
+            }
+            m = m->sig;
+        }
+
+        j = j->sig;
+    }
+}
 
 
+// 3.Muestra cada mazo con sus cartas.
+
+void reporteMazosConCartas() {
+    titulo("REPORTE: Mazos con cartas");
+
+    Mazos *m = primerMazo;
+
+    while (m) {
+        cout << "\nMazo: " << m->nombreMazo << "\n";
+
+        NodoCartaMazo *nc = m->listaCartas;
+
+        // CARTAS DEL MAZO
+        while (nc) {
+            Cartas *c = buscarCarta(nc->IDCarta);
+            if (c) cout << "- " << c->Nombre << "\n";
+            nc = nc->sig;
+        }
+
+        m = m->sig;
+    }
+}
 
 
+//  4.Muestra clanes con sus miembros.
+void reporteClanesMiembros() {
+    titulo("REPORTE: Clanes");
+
+    if (!primerClan) return;
+
+    Clanes *cl = primerClan;
+
+    do {
+        cout << "\nClan: " << cl->nombreClan << "\n";
+
+        NodoJugadorClan *nj = cl->listaJugadores;
+
+        // MIEMBROS
+        while (nj) {
+            Jugadores *j = buscarJugador(nj->IDJugador);
+            if (j) cout << "- " << j->nombreUsuario << "\n";
+            nj = nj->sig;
+        }
+
+        cl = cl->sig;
+    } while (cl != primerClan);
+}
 
 
+// 5.Muestra cada arena con los jugadores que pertenecen.
+
+void reporteArenaJugadores() {
+    titulo("REPORTE: Arenas");
+
+    Arenas *a = primerArena;
+
+    while (a) {
+        cout << "\nArena: " << a->nombreArena << "\n";
+
+        Jugadores *j = primerJugador;
+
+        // JUGADORES EN ESA ARENA
+        while (j) {
+            if (j->IDArena == a->IDArena) {
+                cout << "- " << j->nombreUsuario << "\n";
+            }
+            j = j->sig;
+        }
+
+        a = a->sig;
+    }
+}
+
+ 
+// 6. Muestra todas las batallas con información básica.
+
+void reporteBatallas() {
+    titulo("REPORTE: Batallas");
+
+    if (!primerBatalla) return;
+
+    Batallas *b = primerBatalla;
+
+    do {
+        cout << "\nBatalla: " << b->IDBatalla << "\n";
+        cout << "Ganador: " << b->ganador << "\n";
+        b = b->sig;
+    } while (b != primerBatalla);
+}
 
 
+// 7.Ordena cartas por elixir usando lista enlazada.
+
+void reporteCartasPorElixir() {
+    titulo("REPORTE: Cartas ordenadas");
+
+    Cartas *i = primerCarta;
+
+    // ORDENAMIENTO
+    while (i) {
+        Cartas *j = i->sig;
+
+        while (j) {
+            if (i->costoElixir > j->costoElixir) {
+                // Intercambio de datos
+                swap(i->Nombre, j->Nombre);
+                swap(i->costoElixir, j->costoElixir);
+            }
+            j = j->sig;
+        }
+        i = i->sig;
+    }
+
+    // MOSTRAR
+    Cartas *c = primerCarta;
+    while (c) {
+        cout << c->Nombre << " | " << c->costoElixir << "\n";
+        c = c->sig;
+    }
+}
 
 
+// Ordena jugadores alfabéticamente.
+void reporteJugadoresAlfabetico() {
+    titulo("REPORTE: Jugadores alfabetico");
+
+    Jugadores *i = primerJugador;
+
+    while (i) {
+        Jugadores *j = i->sig;
+
+        while (j) {
+            if (i->nombreUsuario > j->nombreUsuario) {
+                // Intercambio
+                swap(i->nombreUsuario, j->nombreUsuario);
+                swap(i->trofeos, j->trofeos);
+            }
+            j = j->sig;
+        }
+        i = i->sig;
+    }
+
+    Jugadores *aux = primerJugador;
+    while (aux) {
+        cout << aux->nombreUsuario << "\n";
+        aux = aux->sig;
+    }
+}
 
 
+// 9. Cuenta cuántas batallas ha ganado cada jugador.
 
+void reporteBatallasPorJugador() {
+    titulo("REPORTE: Victorias por jugador");
 
+    Jugadores *j = primerJugador;
 
+    while (j) {
+        int wins = 0;
 
+        if (primerBatalla) {
+            Batallas *b = primerBatalla;
+            do {
+                if (b->ganador == j->nombreUsuario) wins++;
+                b = b->sig;
+            } while (b != primerBatalla);
+        }
 
+        cout << j->nombreUsuario << " -> " << wins << "\n";
 
+        j = j->sig;
+    }
+}
 
 
 /*-----------------------------------------------------------------------------------------------
@@ -2747,7 +2991,67 @@ void menuBatallas() {
     } while (opcion != 3);
 }
 
+// MENU REPORTES
+void menuReportes() {
+    int op;
+    do {
+        cout << "\n     REPORTES\n";
+        cout << "1. Todas las listas\n";
+        cout << "2. Detalle jugadores\n";
+        cout << "3. Mazos con cartas\n";
+        cout << "4. Clanes con miembros\n";
+        cout << "5. Arenas con jugadores\n";
+        cout << "6. Batallas\n";
+        cout << "7. Cartas por elixir\n";
+        cout << "8. Jugadores alfabetico\n";
+        cout << "9. Victorias por jugador\n";
+        cout << "10. Volver\n";
+        cout << "Seleccione: ";
+        cin >> op;
+        cin.ignore(); 
+        
 
+        switch(op) {
+            case 1: reporteTodasListas(); break;
+            case 2: reporteDetalleJugadores(); break;
+            case 3: reporteMazosConCartas(); break;
+            case 4: reporteClanesMiembros(); break;
+            case 5: reporteArenaJugadores(); break;
+            case 6: reporteBatallas(); break;
+            case 7: reporteCartasPorElixir(); break;
+            case 8: reporteJugadoresAlfabetico(); break;
+            case 9: reporteBatallasPorJugador(); break;
+            case 10: break;
+            default: cout << "Opcion invalida\n"; break;
+        }
+
+    } while(op != 10);
+}
+
+
+// MENU CONSULTAS
+void menuConsultas() {
+    int op;
+    do {
+        cout << "\n       CONSULTAS\n";
+        cout << "1. Carta mas usada\n";
+        cout << "2. Jugador con mas trofeos\n";
+        cout << "3. Clan con mas miembros\n";
+        cout << "4. Volver\n";
+        cout << "Seleccione: ";
+        cin >> op;
+        cin.ignore(); 
+
+        switch(op) {
+            case 1: cartaMasUsada(); break;
+            case 2: jugadorMasTrofeos(); break;
+            case 3: clanMasMiembros(); break;
+            case 4: break;
+            default: cout << "Opcion invalida\n"; break;
+        }
+
+    } while(op != 4);
+}
 // ============================================================
 // MENU MANTENIMIENTO
 // ============================================================
@@ -2790,6 +3094,7 @@ void menuMantenimiento() {
 
 
 
+
 // ============================================================
 // MENÚ PRINCIPAL
 // ============================================================
@@ -2811,8 +3116,8 @@ void menuPrincipal() {
 
         switch (opcion) {
             case 1: menuMantenimiento(); break;
-            case 2: cout << "(Consultas - por implementar)" << endl; break;
-            case 3: cout << "(Reportes - por implementar)"  << endl; break;
+            case 2: menuConsultas(); break;     
+            case 3: menuReportes(); break;
             case 4: cout << "(Simulacion - por implementar)" << endl; break;
             case 5: cout << "\nHasta luego!" << endl; break;
             default: cout << "Opcion no valida. Intente de nuevo." << endl;
