@@ -949,30 +949,28 @@ void modificarClan(int IDClan){
             cout << "ID del nuevo jugador: ";
             cin >> IDJugadorNuevo;
 
-            // Validar que exista en el sistema
-            if(buscarJugador(IDJugadorNuevo) == NULL){
+            Jugadores *nuevo = buscarJugador(IDJugadorNuevo);
+            if(nuevo == NULL){
                 cout << "Error: No existe ese jugador en el sistema." << endl;
+            } else if(nuevo->IDClan != 0){
+                // validar que no esté en otro clan
+                cout << "Error: El jugador ya pertenece a otro clan." << endl;
             } else {
-                // Validar que no esté ya en el clan
-                NodoJugadorClan *verificar = temp->listaJugadores;
-                bool repetido = false;
-                while(verificar != NULL){
-                    if(verificar->IDJugador == IDJugadorNuevo){
-                        repetido = true;
-                        break;
-                    }
-                    verificar = verificar->sig;
+                // actualizar jugador viejo
+                Jugadores *viejo = buscarJugador(IDJugadorViejo);
+                if(viejo != NULL){
+                    viejo->IDClan = 0;
                 }
 
-                if(repetido){
-                    cout << "Error: Ese jugador ya está en el clan." << endl;
-                } else {
-                    tempJugador->IDJugador = IDJugadorNuevo;
-                    cout << "Jugador reemplazado correctamente." << endl;
-                }
+                //  asignar nuevo jugador
+                tempJugador->IDJugador = IDJugadorNuevo;
+                nuevo->IDClan = IDClan;
+
+                cout << "Jugador reemplazado correctamente." << endl;
             }
         }
     }
+
     cout << "Clan actualizado correctamente." << endl;
 }
 
@@ -1019,25 +1017,39 @@ void modificarArena(int IDA){
 }
 
 void eliminarCarta(int IDCarta){
-    // Buscar la carta
     Cartas *temp = primerCarta;
-    Cartas *tempAnt = NULL;
+    Cartas *ant = NULL;
 
+    // validar si la carta está en algún mazo
+    Mazos *mazo = primerMazo;
+    while(mazo != NULL){
+        NodoCartaMazo *c = mazo->listaCartas;
+        while(c != NULL){
+            if(c->IDCarta == IDCarta){
+                cout << "Error: No se puede eliminar la carta porque esta en uso en un mazo." << endl;
+                return;
+            }
+            c = c->sig;
+        }
+        mazo = mazo->sig;
+    }
+
+    // Buscar la carta
     while(temp != NULL){
-        if(temp -> IDCarta == IDCarta){
-            // Si es el primero de la lista
-            if(tempAnt == NULL){
-                primerCarta = temp -> sig;
+        if(temp->IDCarta == IDCarta){
+            if(ant == NULL){
+                primerCarta = temp->sig;
             } else {
-                tempAnt -> sig = temp -> sig;
+                ant->sig = temp->sig;
             }
             delete temp;
             cout << "Carta eliminada correctamente." << endl;
             return;
         }
-        tempAnt = temp;
-        temp = temp -> sig;
+        ant = temp;
+        temp = temp->sig;
     }
+
     cout << "Error: No se encontró una carta con ese ID." << endl;
 }
 
@@ -1048,6 +1060,41 @@ void eliminarJugador(int IDJ){
         cout << "Error: No se encontró un jugador con ese ID." << endl;
         return;
     }
+
+    // eliminarlo del clan si pertenece a uno
+    if(temp->IDClan != 0){
+        Clanes *clan = buscarClan(temp->IDClan);
+        if(clan != NULL){
+            NodoJugadorClan *act = clan->listaJugadores;
+            NodoJugadorClan *ant = NULL;
+
+            while(act != NULL){
+                if(act->IDJugador == IDJ){
+                    if(ant == NULL){
+                        clan->listaJugadores = act->sig;
+                    } else {
+                        ant->sig = act->sig;
+                    }
+                    delete act;
+                    clan->cantidadMiembros--;
+                    break;
+                }
+                ant = act;
+                act = act->sig;
+            }
+        }
+    }
+
+    // eliminar sus mazos
+    Mazos *mazo = primerMazo;
+    while(mazo != NULL){
+        Mazos *sig = mazo->sig;
+        if(mazo->IDJugador == IDJ){
+            eliminarMazo(mazo->IDMazo);
+        }
+        mazo = sig;
+    }
+
     // Ajustar los enlaces de la lista doblemente enlazada
     if(temp->ant != NULL) temp->ant->sig = temp->sig;
     else                  primerJugador = temp->sig;
