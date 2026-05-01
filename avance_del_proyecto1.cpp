@@ -278,7 +278,7 @@ Batallas *buscarBatalla(int IDBatalla){
 //Insertar al inicio 
 void insertarCartas(int IDCarta, string nombre, string rareza, string tipo, int costoElixir, double dañoBase, int vidaBase){
     // Validar que los datos de la carta sean válidos.
-    if (IDCarta < 0 || nombre.empty() || rareza.empty() || tipo.empty() || costoElixir < 0 || dañoBase < 0 || vidaBase < 0) {
+    if (IDCarta < 0 || nombre.empty() || rareza.empty() || tipo.empty() || costoElixir < 1 || costoElixir > 9 || dañoBase < 0 || vidaBase < 0) {
         cout << "Error: Datos de la carta no válidos. Por favor, intente de nuevo." << endl;
         return;
     }
