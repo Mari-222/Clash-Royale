@@ -720,8 +720,9 @@ void modificarJugador(int IDJ){
     int nuevoNivelRey, nuevosTrofeos, nuevoIDArena, nuevoIDClan;
 
     cout << "Nuevo nombre de usuario: ";
-    cin >> nuevoNombre;
-    cin .ignore(); 
+    cin.ignore(); // limpiar buffer antes de getline
+    getline(cin, nuevoNombre);
+
     cout << "Nuevo nivel del rey: ";
     cin >> nuevoNivelRey;
     cout << "Nuevos trofeos: ";
@@ -737,30 +738,60 @@ void modificarJugador(int IDJ){
         return;
     }
 
-    // Validar que la arena el clan existan
-    if(buscarArena(nuevoIDArena) == NULL){
+    // Validar que la arena exista
+    Arenas *arena = buscarArena(nuevoIDArena);
+    if(arena == NULL){
         cout << "Error: No existe una arena con ese ID." << endl;
         return;
     }
-    // Validar que la arena el clan existan
-    if(buscarClan(nuevoIDClan) == NULL){
+
+    // Validar que el clan exista (permitiendo 0 = sin clan)
+    if(nuevoIDClan != 0 && buscarClan(nuevoIDClan) == NULL){
         cout << "Error: No existe un clan con ese ID." << endl;
         return;
     }
 
-    //validar los trofeos del jugador con el rango de la arena
-    Arenas *arena = buscarArena(nuevoIDArena);
+    // validar los trofeos del jugador con el rango de la arena
     if(nuevosTrofeos < arena->trofeosMin || nuevosTrofeos > arena->trofeosMax){
         cout << "Error: El número de trofeos no es compatible con la nueva arena." << endl;
         return;
     }
 
-    // Asignar todo de una vez
-    temp->nombreUsuario = nuevoNombre;
-    temp->nivelRey = nuevoNivelRey;
-    temp->trofeos = nuevosTrofeos;
-    temp->IDArena = nuevoIDArena;
-    temp->IDClan = nuevoIDClan;
+    // 🔴 MANEJO DE CAMBIO DE CLAN
+    if(temp->IDClan != nuevoIDClan){
+        // quitar del clan anterior si tenía
+        if(temp->IDClan != 0){
+            eliminarJugadorDeClan(temp->IDClan, IDJ);
+        }
+
+        // agregar al nuevo clan si no es 0
+        if(nuevoIDClan != 0){
+            insertarJugadorEnClan(nuevoIDClan, IDJ);
+        }
+    }
+
+    // guardar datos antes de reordenar (por el nombre)
+    int id = temp->IDJugador;
+
+    // Eliminar de la lista(para no romper el orden)
+    Jugadores* actual = primerJugador;
+    Jugadores* ant = NULL;
+
+    while(actual != NULL && actual != temp){
+        ant = actual;
+        actual = actual->sig;
+    }
+
+    if(ant == NULL){
+        primerJugador = temp->sig;
+    } else {
+        ant->sig = temp->sig;
+    }
+
+    delete temp;
+
+    // reinsertar nuevos datos ordenados
+    insertarJugador(id, nuevoNombre, nuevoNivelRey, nuevosTrofeos, nuevoIDArena, nuevoIDClan);
 
     cout << "Jugador actualizado correctamente." << endl;
 }
