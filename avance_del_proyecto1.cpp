@@ -733,19 +733,18 @@ void modificarJugador(int IDJ){
     int nuevoNivelRey, nuevosTrofeos, nuevoIDArena, nuevoIDClan;
 
     cout << "Nuevo nombre de usuario: ";
-    cin.ignore(); // limpiar buffer antes de getline
+    cin.ignore();
     getline(cin, nuevoNombre);
-
     cout << "Nuevo nivel del rey: ";
     cin >> nuevoNivelRey;
     cout << "Nuevos trofeos: ";
     cin >> nuevosTrofeos;
     cout << "Nuevo ID de arena: ";
     cin >> nuevoIDArena;
-    cout << "Nuevo ID de clan: ";
+    cout << "Nuevo ID de clan (0 = sin clan): ";
     cin >> nuevoIDClan;
 
-    // Validar
+    // Validar valores negativos
     if(nuevoNivelRey < 0 || nuevosTrofeos < 0 || nuevoIDArena < 0 || nuevoIDClan < 0){
         cout << "Error: No se permiten valores negativos." << endl;
         return;
@@ -758,57 +757,70 @@ void modificarJugador(int IDJ){
         return;
     }
 
-    // Validar que el clan exista (permitiendo 0 = sin clan)
+    // Validar que el clan exista (0 = sin clan, se permite)
     if(nuevoIDClan != 0 && buscarClan(nuevoIDClan) == NULL){
         cout << "Error: No existe un clan con ese ID." << endl;
         return;
     }
 
-    // validar los trofeos del jugador con el rango de la arena
+    // Validar trofeos con el rango de la arena
     if(nuevosTrofeos < arena->trofeosMin || nuevosTrofeos > arena->trofeosMax){
         cout << "Error: El número de trofeos no es compatible con la nueva arena." << endl;
         return;
     }
 
-    // MANEJO DE CAMBIO DE CLAN
+    // Manejo de cambio de clan: actualizar sublistas
     if(temp->IDClan != nuevoIDClan){
-        // quitar del clan anterior si tenía
+        // Quitar del clan anterior si tenía
         if(temp->IDClan != 0){
-            eliminarJugadorDeClan(temp->IDClan, IDJ);
+            Clanes *clanViejo = buscarClan(temp->IDClan);
+            if(clanViejo != NULL){
+                NodoJugadorClan *nj = clanViejo->listaJugadores;
+                NodoJugadorClan *njAnt = NULL;
+                while(nj != NULL){
+                    if(nj->IDJugador == IDJ){
+                        if(njAnt == NULL) clanViejo->listaJugadores = nj->sig;
+                        else              njAnt->sig = nj->sig;
+                        delete nj;
+                        clanViejo->cantidadMiembros--;
+                        break;
+                    }
+                    njAnt = nj;
+                    nj = nj->sig;
+                }
+            }
         }
-
-        // agregar al nuevo clan si no es 0
+        // Agregar al nuevo clan si no es 0
         if(nuevoIDClan != 0){
-            insertarJugadorEnClan(nuevoIDClan, IDJ);
+            Clanes *clanNuevo = buscarClan(nuevoIDClan);
+            if(clanNuevo != NULL){
+                NodoJugadorClan *nuevoNodo = new NodoJugadorClan(IDJ);
+                if(clanNuevo->listaJugadores == NULL){
+                    clanNuevo->listaJugadores = nuevoNodo;
+                } else {
+                    NodoJugadorClan *ultimo = clanNuevo->listaJugadores;
+                    while(ultimo->sig != NULL) ultimo = ultimo->sig;
+                    ultimo->sig = nuevoNodo;
+                }
+                clanNuevo->cantidadMiembros++;
+            }
         }
     }
 
-    // guardar datos antes de reordenar (por el nombre)
+    // Guardar el ID antes de eliminar el nodo
     int id = temp->IDJugador;
 
-    // Eliminar de la lista(para no romper el orden)
-    Jugadores* actual = primerJugador;
-    Jugadores* ant = NULL;
-
-    while(actual != NULL && actual != temp){
-        ant = actual;
-        actual = actual->sig;
-    }
-
-    if(ant == NULL){
-        primerJugador = temp->sig;
-    } else {
-        ant->sig = temp->sig;
-    }
-
+    // Eliminar de la lista para no romper el orden alfabético
+    if(temp->ant != NULL) temp->ant->sig = temp->sig;
+    else                  primerJugador = temp->sig;
+    if(temp->sig != NULL) temp->sig->ant = temp->ant;
     delete temp;
 
-    // reinsertar nuevos datos ordenados
+    // Reinsertar con los nuevos datos en la posición correcta
     insertarJugador(id, nuevoNombre, nuevoNivelRey, nuevosTrofeos, nuevoIDArena, nuevoIDClan);
 
     cout << "Jugador actualizado correctamente." << endl;
 }
-
 void modificarMazo(int IDM){
     // Buscar el mazo
     Mazos *temp = buscarMazo(IDM);
@@ -1052,6 +1064,35 @@ void eliminarCarta(int IDCarta){
 
     cout << "Error: No se encontró una carta con ese ID." << endl;
 }
+void eliminarMazo(int IDM){
+    Mazos *temp = primerMazo;
+    Mazos *tempAnt = NULL;
+    // Buscar el mazo 
+    while(temp != NULL){
+        if(temp->IDMazo == IDM){
+            if(tempAnt == NULL){
+                primerMazo = temp->sig;
+            } else {
+                tempAnt->sig = temp->sig;
+            }
+
+            // Liberar sublista de cartas antes de eliminar el mazo
+            NodoCartaMazo *carta = temp->listaCartas;
+            while(carta != NULL){
+                NodoCartaMazo *cartaTemp = carta;
+                carta = carta->sig;
+                delete cartaTemp;
+            }
+
+            delete temp;
+            cout << "Mazo eliminado correctamente." << endl;
+            return;
+        }
+        tempAnt = temp;
+        temp = temp->sig;
+    }
+    cout << "Error: No se encontró un mazo con ese ID." << endl;
+}
 
 void eliminarJugador(int IDJ){
     Jugadores *temp = buscarJugador(IDJ);
@@ -1105,36 +1146,6 @@ void eliminarJugador(int IDJ){
     cout << "Jugador eliminado correctamente." << endl;
 }
 
-
-void eliminarMazo(int IDM){
-    Mazos *temp = primerMazo;
-    Mazos *tempAnt = NULL;
-    // Buscar el mazo 
-    while(temp != NULL){
-        if(temp->IDMazo == IDM){
-            if(tempAnt == NULL){
-                primerMazo = temp->sig;
-            } else {
-                tempAnt->sig = temp->sig;
-            }
-
-            // Liberar sublista de cartas antes de eliminar el mazo
-            NodoCartaMazo *carta = temp->listaCartas;
-            while(carta != NULL){
-                NodoCartaMazo *cartaTemp = carta;
-                carta = carta->sig;
-                delete cartaTemp;
-            }
-
-            delete temp;
-            cout << "Mazo eliminado correctamente." << endl;
-            return;
-        }
-        tempAnt = temp;
-        temp = temp->sig;
-    }
-    cout << "Error: No se encontró un mazo con ese ID." << endl;
-}
 
 void eliminarClan(int IDClan){
     Clanes *temp = buscarClan(IDClan);
