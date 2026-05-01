@@ -2270,9 +2270,8 @@ void consultaMazosDeJugador() {
 
 //REPORTES
 // 1.Muestra todas las listas principales del sistema.
-
 void reporteTodasListas() {
-    titulo("REPORTE: Todas las listas");
+    cout << "\n=== REPORTE: Todas las listas ===" << endl;
 
     // CARTAS
     cout << "\n// CARTAS\n";
@@ -2316,7 +2315,7 @@ void reporteTodasListas() {
         a = a->sig;
     }
 
-    // BATALLAS (lista circular)
+    // BATALLAS (lista doble circular)
     cout << "\n// BATALLAS\n";
     if (primerBatalla) {
         Batallas *b = primerBatalla;
@@ -2328,10 +2327,9 @@ void reporteTodasListas() {
 }
 
 
-//2.Muestra cada jugador con su arena, clan y mazos.
-
+// 2.Muestra cada jugador con su arena, clan y mazos.
 void reporteDetalleJugadores() {
-    titulo("REPORTE: Detalle jugadores");
+    cout << "\n=== REPORTE: Detalle jugadores ===" << endl;
 
     Jugadores *j = primerJugador;
 
@@ -2360,9 +2358,8 @@ void reporteDetalleJugadores() {
 
 
 // 3.Muestra cada mazo con sus cartas.
-
 void reporteMazosConCartas() {
-    titulo("REPORTE: Mazos con cartas");
+    cout << "\n=== REPORTE: Mazos con cartas ===" << endl;
 
     Mazos *m = primerMazo;
 
@@ -2383,9 +2380,9 @@ void reporteMazosConCartas() {
 }
 
 
-//  4.Muestra clanes con sus miembros.
+// 4.Muestra clanes con sus miembros.
 void reporteClanesMiembros() {
-    titulo("REPORTE: Clanes");
+    cout << "\n=== REPORTE: Clanes ===" << endl;
 
     if (!primerClan) return;
 
@@ -2409,9 +2406,8 @@ void reporteClanesMiembros() {
 
 
 // 5.Muestra cada arena con los jugadores que pertenecen.
-
 void reporteArenaJugadores() {
-    titulo("REPORTE: Arenas");
+    cout << "\n=== REPORTE: Arenas ===" << endl;
 
     Arenas *a = primerArena;
 
@@ -2432,11 +2428,10 @@ void reporteArenaJugadores() {
     }
 }
 
- 
-// 6. Muestra todas las batallas con información básica.
 
+// 6. Muestra todas las batallas con información básica.
 void reporteBatallas() {
-    titulo("REPORTE: Batallas");
+    cout << "\n=== REPORTE: Batallas ===" << endl;
 
     if (!primerBatalla) return;
 
@@ -2451,9 +2446,8 @@ void reporteBatallas() {
 
 
 // 7.Ordena cartas por elixir usando lista enlazada.
-
 void reporteCartasPorElixir() {
-    titulo("REPORTE: Cartas ordenadas");
+    cout << "\n=== REPORTE: Cartas ordenadas por elixir ===" << endl;
 
     Cartas *i = primerCarta;
 
@@ -2481,9 +2475,9 @@ void reporteCartasPorElixir() {
 }
 
 
-// Ordena jugadores alfabéticamente.
+// 8. Ordena jugadores alfabéticamente.
 void reporteJugadoresAlfabetico() {
-    titulo("REPORTE: Jugadores alfabetico");
+    cout << "\n=== REPORTE: Jugadores alfabetico ===" << endl;
 
     Jugadores *i = primerJugador;
 
@@ -2510,9 +2504,8 @@ void reporteJugadoresAlfabetico() {
 
 
 // 9. Cuenta cuántas batallas ha ganado cada jugador.
-
 void reporteBatallasPorJugador() {
-    titulo("REPORTE: Victorias por jugador");
+    cout << "\n=== REPORTE: Victorias por jugador ===" << endl;
 
     Jugadores *j = primerJugador;
 
