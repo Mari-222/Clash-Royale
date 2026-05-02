@@ -1802,8 +1802,7 @@ void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string 
         } while (temp != primerBatalla);
     }
 
-    insertarBatalla(nuevoID, IDJ1, IDJ2, IDM1, IDM2, ganador,coronasJ1, coronasJ2, duracion, IDArena, fecha,elixirJ1, elixirJ2, tipoJ1, tipoJ2,
-ciclosJ1, ciclosJ2);
+    insertarBatalla(id, idJ1, idJ2, idM1, idM2, ganador, cJ1, cJ2, duracion, idArena, fecha, 0,0,"","",0,0);
 
     cout << "Batalla registrada con ID: " << nuevoID << endl;
 }
