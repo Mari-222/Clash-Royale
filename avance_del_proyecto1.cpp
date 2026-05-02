@@ -1338,28 +1338,21 @@ void cargarDatos(){
 
     // ===== JUGADORES (cuarto porque mazos dependen de ellos) =====
     // Trofeos deben corresponder al rango de la arena asignada
-    insertarJugador(1, "Alejandro", 10, 2400, 8, 3);  // Arena 8: 2300-2599
-    insertarJugador(2, "Beatriz", 8, 1700, 6, 1);     // Arena 6: 1600-1999
-    insertarJugador(3, "Carlos", 12, 3100, 10, 5);    // Arena 10: 3000-9999
-    insertarJugador(4, "Diana", 9, 2100, 7, 2);       // Arena 7: 2000-2299
-    insertarJugador(5, "Eduardo", 11, 2800, 9, 4);    // Arena 9: 2600-2999
-    insertarJugador(6, "Fernanda", 7, 1400, 5, 6);    // Arena 5: 1300-1599
-    insertarJugador(7, "Gabriel", 13, 3500, 10, 5);   // Arena 10: 3000-9999
-    insertarJugador(8, "Helena", 6, 900, 3, 7);       // Arena 3: 600-999
-    insertarJugador(9, "Ivan", 10, 2300, 8, 8);       // Arena 8: 2300-2599
-    insertarJugador(10, "Julia", 8, 1600, 6, 9);      // Arena 6: 1600-1999
+    insertarJugador(1, "Alejandro", 10, 2400, 8, 0);
+    insertarJugador(2, "Beatriz", 8, 1700, 6, 2);
+    insertarJugador(3, "Carlos", 12, 3100, 10, 0);
+    insertarJugador(4, "Diana", 9, 2100, 7, 4);
+    insertarJugador(5, "Eduardo", 11, 2800, 9, 1);
+    insertarJugador(6, "Fernanda", 7, 1400, 5, 3);
+    insertarJugador(7, "Gabriel", 13, 3500, 10, 0);
+    insertarJugador(8, "Helena", 6, 900, 3, 8);
+    insertarJugador(9, "Ivan", 10, 2300, 8, 5);
+    insertarJugador(10, "Julia", 8, 1600, 6, 10);
 
     // ===== ASIGNAR JUGADORES A CLANES =====
     insertarJugadorEnClan(3, 1);  // Alejandro -> Legion Dorada
-    insertarJugadorEnClan(1, 2);  // Beatriz -> Dragones del Norte
     insertarJugadorEnClan(5, 3);  // Carlos -> Sombras Eternas
-    insertarJugadorEnClan(2, 4);  // Diana -> Guerreros del Sur
-    insertarJugadorEnClan(4, 5);  // Eduardo -> Furia Barbara
-    insertarJugadorEnClan(6, 6);  // Fernanda -> Reyes del Caos
     insertarJugadorEnClan(5, 7);  // Gabriel -> Sombras Eternas
-    insertarJugadorEnClan(7, 8);  // Helena -> Caballeros Reales
-    insertarJugadorEnClan(8, 9);  // Ivan -> Tormenta Arcana
-    insertarJugadorEnClan(9, 10); // Julia -> Guardianes del Hielo
 
     // ===== MAZOS (quinto porque batallas dependen de ellos) =====
     insertarMazo(1, "Mazo Gigante", "Asalto", 1);
