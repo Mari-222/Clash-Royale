@@ -335,7 +335,7 @@ void insertarJugador(int IDJ, string n, int nr, int t, int IDA, int IDC){
     }
 
     //Validar si existe el clan
-    if(buscarClan(IDC) == NULL){
+    if(IDC != 0 && buscarClan(IDC) == NULL){
         cout << "Error: No existe un clan con ese ID." << endl;
         return;
     }
