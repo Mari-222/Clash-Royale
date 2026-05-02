@@ -1458,16 +1458,17 @@ void cargarDatos(){
     // ===== BATALLAS =====
     //ESTA PARTE NO SE SI ESTARÁ BIEN, YA QUE FALTA LO DE SIMULAR BATLLAS ENTONCES NO SE
     //QUEDA PROVICIONALMENTE
-    insertarBatalla(1, 1, 2, 1, 2, "Alejandro", 3, 1, 2.5, 8, "2026-04-01");
-    insertarBatalla(2, 3, 4, 3, 4, "Carlos", 2, 0, 3.1, 9, "2026-04-02");
-    insertarBatalla(3, 5, 6, 5, 6, "Eduardo", 3, 2, 2.8, 8, "2026-04-03");
-    insertarBatalla(4, 7, 8, 7, 8, "Gabriel", 3, 0, 1.9, 10, "2026-04-04");
-    insertarBatalla(5, 9, 10, 9, 10, "Ivan", 2, 1, 2.3, 7, "2026-04-05");
-    insertarBatalla(6, 2, 3, 2, 3, "Carlos", 1, 3, 3.5, 9, "2026-04-06");
-    insertarBatalla(7, 4, 5, 4, 5, "Eduardo", 0, 3, 2.7, 8, "2026-04-07");
-    insertarBatalla(8, 6, 7, 6, 7, "Gabriel", 1, 3, 2.1, 10, "2026-04-08");
-    insertarBatalla(9, 8, 9, 8, 9, "Ivan", 2, 3, 3.0, 7, "2026-04-09");
-    insertarBatalla(10, 1, 10, 1, 10, "Alejandro", 3, 2, 2.6, 8, "2026-04-10");
+    insertarBatalla(1, 1, 2, 1, 2, "Alejandro", 3, 1, 2.5f, 8, "2026-04-01", 0,0,"","",0,0);
+    insertarBatalla(2, 3, 4, 3, 4, "Carlos", 2, 0, 3.1f, 9, "2026-04-02", 0,0,"","",0,0);
+    insertarBatalla(3, 5, 6, 5, 6, "Eduardo", 3, 2, 2.8f, 8, "2026-04-03", 0,0,"","",0,0);
+    insertarBatalla(4, 7, 8, 7, 8, "Gabriel", 3, 0, 1.9f, 10, "2026-04-04", 0,0,"","",0,0);
+    insertarBatalla(5, 9, 10, 9, 10, "Ivan", 2, 1, 2.3f, 7, "2026-04-05", 0,0,"","",0,0);
+    insertarBatalla(6, 2, 3, 2, 3, "Carlos", 1, 3, 3.5f, 9, "2026-04-06", 0,0,"","",0,0);
+    insertarBatalla(7, 4, 5, 4, 5, "Eduardo", 0, 3, 2.7f, 8, "2026-04-07", 0,0,"","",0,0);
+    insertarBatalla(8, 6, 7, 6, 7, "Gabriel", 1, 3, 2.1f, 10, "2026-04-08", 0,0,"","",0,0);
+    insertarBatalla(9, 8, 9, 8, 9, "Ivan", 2, 3, 3.0f, 7, "2026-04-09", 0,0,"","",0,0);
+    insertarBatalla(10, 1, 10, 1, 10, "Alejandro", 3, 2, 2.6f, 8, "2026-04-10", 0,0,"","",0,0);
+    
 }
 
 
@@ -1795,8 +1796,8 @@ void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string 
         } while (temp != primerBatalla);
     }
 
-    insertarBatalla(id, idJ1, idJ2, idM1, idM2, ganador, cJ1, cJ2, duracion, idArena, fecha, 0,0,"","",0,0);
-
+    insertarBatalla(nuevoID, IDJ1, IDJ2, IDM1, IDM2, ganador,coronasJ1, coronasJ2, duracion, IDArena, fecha,elixirJ1, elixirJ2, tipoJ1, tipoJ2,
+        ciclosJ1, ciclosJ2);
     cout << "Batalla registrada con ID: " << nuevoID << endl;
 }
 
@@ -2966,8 +2967,10 @@ void menuBatallas() {
                 cout << "Fecha (AAAA-MM-DD): ";
                 getline(cin, fecha);
 
-                insertarBatalla(id, idJ1, idJ2, idM1, idM2, ganador,cJ1, cJ2, duracion, idArena, fecha);
+                insertarBatalla(id, idJ1, idJ2, idM1, idM2, ganador, cJ1, cJ2, duracion, idArena, fecha, 0,0,"","",0,0);
                 break;
+
+                
             }
             case 2: {
                 cout << "\n--- Eliminar Batalla ---" << endl;
