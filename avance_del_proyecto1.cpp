@@ -3131,7 +3131,7 @@ void menuPrincipal() {
             case 1: menuMantenimiento(); break;
             case 2: menuConsultas(); break;     
             case 3: menuReportes(); break;
-            case 4: cout << "(Simulacion - por implementar)" << endl; break;
+            case 4: menuSimulacion(); break;
             case 5: cout << "\nHasta luego!" << endl; break;
             default: cout << "Opcion no valida. Intente de nuevo." << endl;
         }
