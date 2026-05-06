@@ -10,7 +10,7 @@ struct Cartas{
     string Rareza;
     string Tipo;
     int costoElixir;
-    double dañoBase;
+    double danioBase;
     int vidaBase;
     int vecesUsada;//lo adicional para ver las cant de cartas mas usadas
 
@@ -22,7 +22,7 @@ struct Cartas{
         Rareza = r;
         Tipo = t;
         costoElixir = ce;
-        dañoBase = db; 
+        danioBase = db; 
         vidaBase = vb;
         vecesUsada = 0;
         
@@ -276,9 +276,9 @@ Batallas *buscarBatalla(int IDBatalla){
 //INSERCIONES
 
 //Insertar al inicio 
-void insertarCartas(int IDCarta, string nombre, string rareza, string tipo, int costoElixir, double dañoBase, int vidaBase){
+void insertarCartas(int IDCarta, string nombre, string rareza, string tipo, int costoElixir, double danioBase, int vidaBase){
     // Validar que los datos de la carta sean válidos.
-    if (IDCarta < 0 || nombre.empty() || rareza.empty() || tipo.empty() || costoElixir < 1 || costoElixir > 9 || dañoBase < 0 || vidaBase < 0) {
+    if (IDCarta < 0 || nombre.empty() || rareza.empty() || tipo.empty() || costoElixir < 1 || costoElixir > 9 || danioBase < 0 || vidaBase < 0) {
         cout << "Error: Datos de la carta no válidos. Por favor, intente de nuevo." << endl;
         return;
     }
@@ -307,7 +307,7 @@ void insertarCartas(int IDCarta, string nombre, string rareza, string tipo, int 
         return;
     }
 
-    Cartas *nuevaCarta = new Cartas(IDCarta, nombre, rareza, tipo, costoElixir, dañoBase, vidaBase);
+    Cartas *nuevaCarta = new Cartas(IDCarta, nombre, rareza, tipo, costoElixir, danioBase, vidaBase);
 
     nuevaCarta -> sig = primerCarta;
     primerCarta = nuevaCarta;
@@ -665,7 +665,7 @@ void modificarCarta(int IDCarta){
     // Pedir todos los nuevos valores
     string nuevoNombre, nuevaRareza, nuevoTipo;
     int nuevoCosto, nuevaVida;
-    double nuevoDaño;
+    double nuevoDanio;
 
     cout << "Nuevo nombre: ";
     cin >> nuevoNombre;
@@ -679,12 +679,12 @@ void modificarCarta(int IDCarta){
     cout << "Nuevo costo de elixir: ";
     cin >> nuevoCosto;
     cout << "Nuevo daño base: ";
-    cin >> nuevoDaño;
+    cin >> nuevoDanio;
     cout << "Nueva vida base: ";
     cin >> nuevaVida;
 
     // Validar
-    if(nuevoCosto < 0 || nuevoDaño < 0 || nuevaVida < 0){
+    if(nuevoCosto < 0 || nuevoDanio < 0 || nuevaVida < 0){
         cout << "Error: No se permiten valores negativos." << endl;
         return;
     }
@@ -712,7 +712,7 @@ void modificarCarta(int IDCarta){
     temp->Rareza = nuevaRareza;
     temp->Tipo = nuevoTipo;
     temp->costoElixir = nuevoCosto;
-    temp->dañoBase = nuevoDaño;
+    temp->danioBase = nuevoDanio;
     temp->vidaBase = nuevaVida;
 
     cout << "Carta actualizada correctamente." << endl;
@@ -1510,13 +1510,13 @@ void cargarDatos(){
 // ------------------------------------------------------------
 //DañoTotal que representa el poder ofensivo del mazo
 // ------------------------------------------------------------
-double calcularDañoTotal(Mazos* mazo) {
+double calcularDanioTotal(Mazos* mazo) {
     double total = 0;
     NodoCartaMazo* temp = mazo->listaCartas;
     while (temp != NULL) {
         Cartas* carta = buscarCarta(temp->IDCarta);
         if (carta != NULL) {
-            total += carta->dañoBase;
+            total += carta->danioBase;
         }
         temp = temp->sig;
     }
@@ -1649,8 +1649,8 @@ void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string 
     // ================================================================
 
     // Poder ofensivo: suma de daño de las 8 cartas
-    double dañoJ1 = calcularDañoTotal(m1);
-    double dañoJ2 = calcularDañoTotal(m2);
+    double danioJ1 = calcularDanioTotal(m1);
+    double danioJ2 = calcularDanioTotal(m2);
 
     // Poder defensivo: suma de vida de las 8 cartas
     int vidaJ1 = calcularVidaTotal(m1);
@@ -1672,8 +1672,8 @@ void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string 
     // ENCOnTRAR GANADOR
     // poderJ=dañoPropio-(vidaRival * 0.3) tiene qye haber un 30% de daño hacaia el otro 
     el.3 sería la defensa que lo afecta del otro jugador */
-    double poderJ1=dañoJ1-(vidaJ2 *0.3);
-    double poderJ2=dañoJ2-(vidaJ1*0.3);
+    double poderJ1=danioJ1-(vidaJ2 *0.3);
+    double poderJ2=danioJ2-(vidaJ1*0.3);
 
     // ================================================================
     // CÁLCULO DE CORONAS
@@ -1758,7 +1758,7 @@ void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string 
     cout << "----------------------------------------" << endl;
 
     cout << "\n[JUGADOR 1] " << j1->nombreUsuario << " - Mazo: " << m1->nombreMazo << endl;
-    cout << "  Daño total del mazo   : " << dañoJ1 << endl;
+    cout << "  Daño total del mazo   : " << danioJ1 << endl;
     cout << "  Vida total del mazo   : " << vidaJ1 << endl;
     cout << "  Promedio de elixir    : " << elixirJ1 << endl;
     cout << "  Tipo predominante     : " << tipoJ1 << endl;
@@ -1766,7 +1766,7 @@ void simularBatalla(int IDJ1, int IDJ2, int IDM1, int IDM2, int IDArena, string 
     cout << "  Poder calculado       : " << poderJ1 << endl;
 
     cout << "\n[JUGADOR 2] " << j2->nombreUsuario << " - Mazo: " << m2->nombreMazo << endl;
-    cout << "  Daño total del mazo   : " << dañoJ2 << endl;
+    cout << "  Daño total del mazo   : " << danioJ2 << endl;
     cout << "  Vida total del mazo   : " << vidaJ2 << endl;
     cout << "  Promedio de elixir    : " << elixirJ2 << endl;
     cout << "  Tipo predominante     : " << tipoJ2 << endl;
@@ -2562,7 +2562,7 @@ void menuCartas() {
             case 1: {
                 cout << "\n--- Insertar Carta ---" << endl;
                 int id, costo, vida;
-                double daño;
+                double danio;
                 string nombre, rareza, tipo;
 
                 cout << "ID de la carta: ";
@@ -2577,11 +2577,11 @@ void menuCartas() {
                 cout << "Costo de elixir: ";
                 cin >> costo;
                 cout << "Daño base: ";
-                cin >> daño;
+                cin >> danio;
                 cout << "Vida base: ";
                 cin >> vida;
 
-                insertarCartas(id, nombre, rareza, tipo, costo, daño, vida);
+                insertarCartas(id, nombre, rareza, tipo, costo, danio, vida);
                 break;
             }
             case 2: {
