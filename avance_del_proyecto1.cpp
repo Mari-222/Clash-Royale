@@ -463,6 +463,18 @@ void insertarArena(int IDA, string nA, int tmin, int tmax){
         return;
     }
 
+    //Validar que dos arenas no tengas los mismos rangos de trofeos
+    Arenas *temp = primerArena;
+    while(temp != NULL){
+        if((tmin >= temp->trofeosMin && tmin <= temp->trofeosMax) || 
+        (tmax >= temp->trofeosMin && tmax <= temp->trofeosMax) ||
+        (tmin <= temp->trofeosMin && tmax >= temp->trofeosMax)){
+            cout << "Error: El rango de trofeos se solapa con otra arena." << endl;
+            return;
+        }
+        temp = temp->sig;
+    }
+
     Arenas *nuevaArena = new Arenas(IDA, nA, tmin, tmax);
     //si la lista está vacia
     if(primerArena == NULL){
@@ -1018,6 +1030,20 @@ void modificarArena(int IDA){
     if(nuevoTrofeosMin > nuevoTrofeosMax){
         cout << "Error: El número mínimo de trofeos no puede ser mayor que el máximo." << endl;
         return;
+    }
+
+    //Validar que dos arenas no tengas los mismos rangos de trofeos
+    Arenas *tempVal = primerArena;
+    while(tempVal != NULL){
+        if(tempVal->IDArena != IDA){ // saltar la arena actual
+            if((nuevoTrofeosMin >= tempVal->trofeosMin && nuevoTrofeosMin <= tempVal->trofeosMax) || 
+            (nuevoTrofeosMax >= tempVal->trofeosMin && nuevoTrofeosMax <= tempVal->trofeosMax) ||
+            (nuevoTrofeosMin <= tempVal->trofeosMin && nuevoTrofeosMax >= tempVal->trofeosMax)){
+                cout << "Error: El rango de trofeos se solapa con otra arena." << endl;
+                return;
+            }
+        }
+        tempVal = tempVal->sig;
     }
 
     // Asignar todo de una vez
