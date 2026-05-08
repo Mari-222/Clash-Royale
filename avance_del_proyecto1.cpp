@@ -680,14 +680,12 @@ void modificarCarta(int IDCarta){
     double nuevoDanio;
 
     cout << "Nuevo nombre: ";
-    cin >> nuevoNombre;
-    cin .ignore(); 
+    cin.ignore();
+    getline(cin, nuevoNombre);
     cout << "Nueva rareza: ";
-    cin >> nuevaRareza;
-    cin .ignore(); 
+    getline(cin, nuevaRareza);
     cout << "Nuevo tipo: ";
-    cin >> nuevoTipo;
-    cin .ignore(); 
+    getline(cin, nuevoTipo);
     cout << "Nuevo costo de elixir: ";
     cin >> nuevoCosto;
     cout << "Nuevo daño base: ";
