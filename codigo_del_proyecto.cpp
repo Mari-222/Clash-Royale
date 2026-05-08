@@ -14,7 +14,8 @@ Josué David González Alvarado
 */
 
 
-//lista simple 
+// Lista simple con inserción al inicio, almacena todas las cartas disponibles del juego
+// con sus atributos de rareza, tipo, costo de elixir, daño base y vida base. 
 struct Cartas{
     int IDCarta;
     string Nombre;
@@ -42,7 +43,8 @@ struct Cartas{
 }*primerCarta;
 
 
-//lista doble
+// Lista doble ordenada alfabéticamente por nombreUsuario, almacena los jugadores del sistema
+// con sus trofeos, nivel de rey, arena y clan asignados.
 struct Jugadores{
     int IDJugador;
     string nombreUsuario;
@@ -66,7 +68,8 @@ struct Jugadores{
 }*primerJugador;
 
 
-// Nodo de la sublista (guarda el ID de la carta)
+// Nodo de la sublista de cartas dentro de un mazo, guarda únicamente el ID de la carta
+// para referenciarla sin duplicar su información.
 struct NodoCartaMazo {
     int IDCarta;
     NodoCartaMazo *sig;
@@ -78,7 +81,8 @@ struct NodoCartaMazo {
 };
 
 
-//lista simple
+// Lista simple con inserción al final, almacena los mazos de los jugadores.
+// Cada mazo contiene una sublista de exactamente 8 cartas referenciadas por ID.
 struct Mazos{
     int IDMazo;
     string nombreMazo;
@@ -101,7 +105,8 @@ struct Mazos{
 }*primerMazo;
 
 
-// Nodo de la sublista
+// Nodo de la sublista de jugadores dentro de un clan, guarda únicamente el ID del jugador
+// para referenciarlo sin duplicar su información.
 struct NodoJugadorClan {
     int IDJugador;
     NodoJugadorClan *sig;
@@ -113,7 +118,8 @@ struct NodoJugadorClan {
 };
 
 
-//lista circular de clanes 
+// Lista circular con inserción al final, almacena los clanes del sistema.
+// Cada clan contiene una sublista de sus jugadores miembros referenciados por ID.
 struct Clanes{
     int IDClan;
     string nombreClan;
@@ -136,7 +142,8 @@ struct Clanes{
 }*primerClan;
 
 
-//lista simple de arenas
+// Lista simple con inserción al inicio, almacena las arenas del juego.
+// Cada arena define un rango de trofeos que clasifica a los jugadores y escenarios de batalla.
 struct Arenas{
     int IDArena;
     string nombreArena;
@@ -155,7 +162,8 @@ struct Arenas{
 }*primerArena;
 
 
-//lista circular doble de batallas
+// Lista doble circular con inserción al final, almacena el historial de batallas del sistema.
+// Registra los jugadores, mazos, arena, coronas, ganador, duración y estadísticas opcionales.
 struct Batallas{
     int IDBatalla;
     int IDJugador1;
@@ -167,25 +175,19 @@ struct Batallas{
     int coronasJ2;
     float duracion;
     int IDArena;
-    string fecha; //hay qu elamacenar la fecha todavia
+    string fecha; 
     
 
 
-    // ===== ESTADISTICAS DEL MAZO (OPCIONAL DEL DOC) =====
+    // ===== ESTADISTICAS DEL MAZO =====
     double promedioElixirJ1, promedioElixirJ2;
     string tipoMazoJ1, tipoMazoJ2;
     double consumoElixirJ1, consumoElixirJ2;
 
-
-
-
-
-
-
     Batallas *sig, *ant;
 
     Batallas(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, int cJ1, int cJ2, float d, int IDA, string f,double pe1, double pe2, string t1, string t2,
-         double ce1, double ce2){//se agregan las funciones de estadisticas del mazo(la opcional)
+         double ce1, double ce2){//se agregan las funciones de estadisticas del mazo
         IDBatalla = IDB;
         IDJugador1 = IDJ1;
         IDJugador2 = IDJ2;
@@ -213,6 +215,8 @@ struct Batallas{
 }*primerBatalla;
 
 //CODIGO AUXILIAR PARA BUSQUEDAS, Y ASI NO TENER QUE ESTAR VALIDANDO EN CADA INSERCION SI EXISTE O NO EL ID
+
+// Recorre la lista de cartas y retorna el puntero al nodo con el ID indicado, o NULL si no existe.
 Cartas *buscarCarta(int IDCarta){
     Cartas *temp = primerCarta;
 
@@ -224,6 +228,7 @@ Cartas *buscarCarta(int IDCarta){
     return NULL;
 }
 
+// Recorre la lista de jugadores y retorna el puntero al nodo con el ID indicado, o NULL si no existe.
 Jugadores *buscarJugador(int IDJugador){
     Jugadores *temp = primerJugador;
 
@@ -235,6 +240,7 @@ Jugadores *buscarJugador(int IDJugador){
     return NULL;
 }
 
+// Recorre la lista de mazos y retorna el puntero al nodo con el ID indicado, o NULL si no existe.
 Mazos *buscarMazo(int IDMazo){
     Mazos *temp = primerMazo;
 
@@ -246,6 +252,7 @@ Mazos *buscarMazo(int IDMazo){
     return NULL;
 }
 
+// Recorre la lista circular de clanes y retorna el puntero al nodo con el ID indicado, o NULL si no existe.
 Clanes *buscarClan(int IDClan){
     Clanes *temp = primerClan;
 
@@ -259,6 +266,7 @@ Clanes *buscarClan(int IDClan){
     return NULL;
 }
 
+// Recorre la lista de arenas y retorna el puntero al nodo con el ID indicado, o NULL si no existe.
 Arenas *buscarArena(int IDArena){
     Arenas *temp = primerArena;
 
@@ -270,6 +278,7 @@ Arenas *buscarArena(int IDArena){
     return NULL;
 }
 
+// Recorre la lista doble circular de batallas y retorna el puntero al nodo con el ID indicado, o NULL si no existe.
 Batallas *buscarBatalla(int IDBatalla){
     Batallas *temp = primerBatalla;
 
@@ -295,7 +304,8 @@ string toLower(string s) {
 
 //INSERCIONES
 
-//Insertar al inicio 
+// Inserta una nueva carta al inicio de la lista simple. Valida ID único, rareza válida,
+// tipo válido, costo de elixir entre 1 y 9, y valores no negativos para daño y vida. 
 void insertarCartas(int IDCarta, string nombre, string rareza, string tipo, int costoElixir, double danioBase, int vidaBase){
     // Validar que los datos de la carta sean válidos.
     if (IDCarta < 0 || nombre.empty() || rareza.empty() || tipo.empty() || costoElixir < 1 || costoElixir > 9 || danioBase < 0 || vidaBase < 0) {
@@ -332,8 +342,8 @@ void insertarCartas(int IDCarta, string nombre, string rareza, string tipo, int 
     primerCarta = nuevaCarta;
 }
 
-//Insertar por orden alfabetico
-//no sabía que condicón poner porque en el documento solo dice por nombre, no dice si al principio o al final 
+// Inserta un nuevo jugador manteniendo el orden alfabético en la lista doble.
+// Valida ID único, existencia de arena y clan, y compatibilidad de trofeos con el rango de la arena.
 void insertarJugador(int IDJ, string n, int nr, int t, int IDA, int IDC){
     // Validar que los datos del jugador sean válidos
     if (IDJ < 0 || n.empty() || nr < 0 || t < 0 || IDA < 0 || IDC < 0) {
@@ -397,7 +407,8 @@ void insertarJugador(int IDJ, string n, int nr, int t, int IDA, int IDC){
     actual->sig = nuevoJugador;
 }
 
-//Insertar al final
+// Inserta un nuevo mazo al final de la lista simple.
+// Valida ID único y que el jugador propietario exista en el sistema.
 void insertarMazo(int IDM, string nm, string tm, int IDJ){
     // Validar que los datos del mazo sean válidos
     if (IDM < 0 || nm.empty() || tm.empty() || IDJ < 0) {
@@ -434,7 +445,8 @@ void insertarMazo(int IDM, string nm, string tm, int IDJ){
     temp -> sig = nuevoMazo;
 }
 
-//Insertar al final
+// Inserta un nuevo clan al final de la lista circular.
+// Valida ID único y que los datos no sean negativos ni vacíos.
 void insertarClan(int idclan, string nclan, string reg, int cantmiembros, double puntaje){
     // Validar que los datos del clan sean válidos
     if (idclan < 0 || nclan.empty() || reg.empty() || cantmiembros < 0 || puntaje < 0) {
@@ -464,7 +476,9 @@ void insertarClan(int idclan, string nclan, string reg, int cantmiembros, double
     nuevoClan->sig = primerClan; // Cierra el ciclo
 }
 
-//Insertar al inicio
+// Inserta una nueva arena al inicio de la lista simple.
+// Valida ID único, que trofeosMin no sea mayor que trofeosMax,
+// y que el rango no se solape con ninguna arena existente.
 void insertarArena(int IDA, string nA, int tmin, int tmax){
     //Validar que los datos insertados sena validos 
     if (IDA < 0 || nA.empty() || tmin < 0 || tmax < 0) {
@@ -505,7 +519,10 @@ void insertarArena(int IDA, string nA, int tmin, int tmax){
     primerArena = nuevaArena;
 }
 
-//Insertar al final
+// Inserta una nueva batalla al final de la lista doble circular.
+// Valida ID único, existencia de jugadores, arena y mazos, que los mazos pertenezcan
+// a los jugadores correctos, que tengan 8 cartas, que el ganador sea uno de los dos jugadores
+// y que las coronas estén en rango válido.
 void insertarBatalla(int IDB, int IDJ1, int IDJ2, int IDM1, int IDM2, string g, int cJ1, int cJ2, float d, int IDA, string f, double pe1, 
 double pe2, string t1, string t2,double ce1, double ce2){
 
@@ -585,6 +602,9 @@ double pe2, string t1, string t2,double ce1, double ce2){
 
 
 //INSERCIONES EN SUBLISTAS
+
+// Agrega una carta a la sublista de un mazo. Valida que el mazo exista, que la carta exista
+// en el sistema, que el mazo no tenga ya 8 cartas y que la carta no esté repetida en el mazo.
 void insertarCartaEnMazo(int IDMazo, int IDCarta){
     // Verificar que el mazo existe
     Mazos *mazo = buscarMazo(IDMazo);
@@ -629,7 +649,9 @@ void insertarCartaEnMazo(int IDMazo, int IDCarta){
     mazo->cantidadCartas++;
 }
 
-
+// Agrega un jugador a la sublista de un clan. Valida que el clan y el jugador existan,
+// que el jugador no pertenezca ya a otro clan y que no esté duplicado en la sublista.
+// Actualiza el IDClan del jugador y el contador de miembros del clan.
 void insertarJugadorEnClan(int IDClan, int IDJugador){
     // Verificar que el clan existe
     Clanes *clan = buscarClan(IDClan);
@@ -683,6 +705,9 @@ void insertarJugadorEnClan(int IDClan, int IDJugador){
 
 
 //MODIFICACIONES
+
+// Solicita nuevos valores para todos los atributos de una carta existente.
+// Valida rareza, tipo y que el costo de elixir no sea negativo.
 void modificarCarta(int IDCarta){
     // Buscar la carta
     Cartas *temp = buscarCarta(IDCarta);
@@ -746,6 +771,8 @@ void modificarCarta(int IDCarta){
     cout << "Carta actualizada correctamente." << endl;
 }
 
+// Solicita nuevos valores para un jugador. Maneja el cambio de clan actualizando las sublistas
+// correspondientes. Elimina y reinserta el nodo para mantener el orden alfabético de la lista.
 void modificarJugador(int IDJ){
     // Buscar el jugador
     Jugadores *temp = buscarJugador(IDJ);
@@ -849,6 +876,9 @@ void modificarJugador(int IDJ){
 
     cout << "Jugador actualizado correctamente." << endl;
 }
+
+// Solicita nuevo nombre y tipo para un mazo. Opcionalmente permite reemplazar una carta
+// de la sublista, validando que la carta nueva exista y no esté ya en el mazo.
 void modificarMazo(int IDM){
     // Buscar el mazo
     Mazos *temp = buscarMazo(IDM);
@@ -931,6 +961,8 @@ void modificarMazo(int IDM){
     cout << "Mazo actualizado correctamente." << endl;
 }
 
+// Solicita nuevo nombre, región y puntaje para un clan. Opcionalmente permite reemplazar
+// un jugador de la sublista, validando que el nuevo jugador no pertenezca ya a otro clan.
 void modificarClan(int IDClan){
     // Buscar el clan
     Clanes *temp = buscarClan(IDClan);
@@ -1014,7 +1046,8 @@ void modificarClan(int IDClan){
     cout << "Clan actualizado correctamente." << endl;
 }
 
-
+// Solicita nuevo nombre y rangos de trofeos para una arena.
+// Valida que el nuevo rango no se solape con ninguna otra arena existente.
 void modificarArena(int IDA){
     // Buscar la arena
     Arenas *temp = buscarArena(IDA);
@@ -1070,6 +1103,7 @@ void modificarArena(int IDA){
     cout << "Arena actualizada correctamente." << endl;
 }
 
+// Elimina una carta de la lista principal. 
 void eliminarCarta(int IDCarta){
     Cartas *temp = primerCarta;
     Cartas *ant = NULL;
@@ -1106,6 +1140,8 @@ void eliminarCarta(int IDCarta){
 
     cout << "Error: No se encontró una carta con ese ID." << endl;
 }
+
+// Elimina un mazo de la lista y libera la memoria de su sublista de cartas.
 void eliminarMazo(int IDM){
     Mazos *temp = primerMazo;
     Mazos *tempAnt = NULL;
@@ -1136,6 +1172,8 @@ void eliminarMazo(int IDM){
     cout << "Error: No se encontró un mazo con ese ID." << endl;
 }
 
+// Elimina un jugador de la lista doble. Primero lo remueve de su clan si pertenece a uno,
+// luego elimina todos sus mazos en cascada, y finalmente ajusta los enlaces de la lista doble.
 void eliminarJugador(int IDJ){
     Jugadores *temp = buscarJugador(IDJ);
     // Si no se encuentra el jugador
@@ -1188,7 +1226,8 @@ void eliminarJugador(int IDJ){
     cout << "Jugador eliminado correctamente." << endl;
 }
 
-
+// Elimina un clan de la lista circular. Ajusta el enlace del nodo anterior para mantener
+// la circularidad y libera la memoria de su sublista de jugadores.
 void eliminarClan(int IDClan){
     Clanes *temp = buscarClan(IDClan);
 
@@ -1228,6 +1267,7 @@ void eliminarClan(int IDClan){
     cout << "Clan eliminado correctamente." << endl;
 }
 
+// Elimina una arena de la lista simple reconectando los nodos vecinos.
 void eliminarArena(int IDA){
     Arenas *temp = primerArena;
     Arenas *tempAnt = NULL;
@@ -1250,6 +1290,8 @@ void eliminarArena(int IDA){
     cout << "Error: No se encontró una arena con ese ID." << endl;
 }
 
+// Elimina una batalla de la lista doble circular. Si es el único nodo deja la lista vacía,
+// de lo contrario reconecta los enlaces sig y ant de los nodos vecinos.
 void eliminarBatalla(int IDB){
     Batallas *temp = buscarBatalla(IDB);
 
@@ -1276,6 +1318,8 @@ void eliminarBatalla(int IDB){
 }
 
 //ELIMINACIÓN DE SUBLISTAS
+
+// Elimina una carta específica de la sublista de un mazo y decrementa el contador de cartas.
 void eliminarCartaDeMazo(int IDMazo, int IDCarta){
     Mazos *mazo = buscarMazo(IDMazo);
     if(mazo == NULL){
@@ -1305,6 +1349,7 @@ void eliminarCartaDeMazo(int IDMazo, int IDCarta){
     cout << "Error: No se encontró una carta con ese ID en el mazo." << endl;
 }
 
+// Elimina un jugador específico de la sublista de un clan y decrementa el contador de miembros.
 void eliminarJugadorDeClan(int IDClan, int IDJugador){
     Clanes *clan = buscarClan(IDClan);
     if(clan == NULL){
@@ -1334,7 +1379,9 @@ void eliminarJugadorDeClan(int IDClan, int IDJugador){
     cout << "Error: No se encontró un jugador con ese ID en el clan." << endl;
 }
 
-//CARGAR DATOS
+// Carga automáticamente al inicio del programa al menos 10 registros por cada entidad principal
+// mediante datos definidos directamente en código, sin lectura de archivos externos.
+// El orden de carga es: arenas → cartas → clanes → jugadores → asignación a clanes → mazos → batallas.
 void cargarDatos(){
     // ===== ARENAS (primero porque jugadores dependen de ellas) =====
     insertarArena(1, "Terreno de Entrenamiento", 0, 299);
@@ -1498,8 +1545,8 @@ void cargarDatos(){
     insertarCartaEnMazo(10, 14);
 
     // ===== BATALLAS =====
-    //ESTA PARTE NO SE SI ESTARÁ BIEN, YA QUE FALTA LO DE SIMULAR BATLLAS ENTONCES NO SE
-    //QUEDA PROVICIONALMENTE
+    // Las batallas precargadas usan 0 en estadísticas porque son datos históricos.
+    // Las batallas nuevas se registran con estadísticas reales desde simularBatalla().
     insertarBatalla(1, 1, 2, 1, 2, "Alejandro", 3, 1, 2.5f, 8, "2026-04-01", 0,0,"","",0,0);
     insertarBatalla(2, 3, 4, 3, 4, "Carlos", 2, 0, 3.1f, 9, "2026-04-02", 0,0,"","",0,0);
     insertarBatalla(3, 5, 6, 5, 6, "Eduardo", 3, 2, 2.8f, 8, "2026-04-03", 0,0,"","",0,0);
