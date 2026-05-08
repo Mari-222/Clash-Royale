@@ -1984,7 +1984,8 @@ void menuSimulacion() {
 // CONSULTAS
 
 
-// 1. Carta más utilizada en todos los mazos
+// Recorre todas las cartas y cuenta en cuántos mazos aparece cada una,
+// retornando el nombre de la carta con mayor cantidad de apariciones.
 void consultaCartaMasUsada() {
     cout << "\n=== Carta mas utilizada en mazos ===" << endl;
 
@@ -2033,7 +2034,8 @@ void consultaCartaMasUsada() {
 }
 
 
-// 2. Jugador con más trofeos
+// Recorre la lista de jugadores y retorna el que tenga el mayor valor de trofeos.
+
 void consultaJugadorMasTrofeos() {
     cout << "\n=== Jugador con mas trofeos ===" << endl;
 
@@ -2056,7 +2058,7 @@ void consultaJugadorMasTrofeos() {
 }
 
 
-// 3. Clan con más miembros (lista circular)
+// Recorre la lista circular de clanes y retorna el que tenga mayor cantidadMiembros.
 void consultaClanMasMiembros() {
     cout << "\n=== Clan con mas miembros ===" << endl;
 
@@ -2086,7 +2088,8 @@ void consultaClanMasMiembros() {
 }
 
 
-// 4. Mazo con menor costo promedio de elixir
+// Recorre todos los mazos, calcula el promedio de elixir de cada uno sumando
+// el costoElixir de sus cartas y retorna el mazo con el promedio más bajo.
 void consultaMazoCostoMenor() {
     cout << "\n=== Mazo con menor costo promedio de elixir ===" << endl;
 
@@ -2129,7 +2132,8 @@ void consultaMazoCostoMenor() {
 }
 
 
-// 5. Arena con más jugadores
+// Recorre todas las arenas y para cada una cuenta cuántos jugadores tienen ese IDArena,
+// retornando la arena con mayor cantidad de jugadores asociados.
 void consultaArenaMasJugadores() {
     cout << "\n=== Arena con mas jugadores ===" << endl;
 
@@ -2169,7 +2173,8 @@ void consultaArenaMasJugadores() {
 }
 
 
-// 6. Jugador con más victorias
+// Recorre todos los jugadores y para cada uno cuenta cuántas batallas tienen su nombre
+// en el campo ganador, retornando el jugador con más victorias.
 void consultaJugadorMasVictorias() {
     cout << "\n=== Jugador con mas victorias en batallas ===" << endl;
 
@@ -2210,7 +2215,8 @@ void consultaJugadorMasVictorias() {
 }
 
 
-// 7. Batallas en una arena determinada
+// Solicita un ID de arena y muestra todas las batallas cuyo IDArena coincida,
+// mostrando jugadores, ganador y fecha de cada una.
 void consultaBatallasPorArena() {
     cout << "\n=== Batallas por arena ===" << endl;
 
@@ -2256,7 +2262,8 @@ void consultaBatallasPorArena() {
 }
 
 
-// 8. Jugadores de un clan
+// Solicita un ID de clan y recorre su sublista de jugadores mostrando
+// el nombre y trofeos de cada miembro.
 void consultaJugadoresDeClan() {
     cout << "\n=== Jugadores de un clan ===" << endl;
 
@@ -2292,7 +2299,8 @@ void consultaJugadoresDeClan() {
 
 
 
-// 9. Cartas legendarias
+// Recorre la lista de cartas y muestra las que tienen rareza "legendaria",
+// usando toLower para comparar sin distinción de mayúsculas.
 void consultaCartasLegendarias() {
     cout << "\n=== Cartas de rareza Legendaria ===" << endl;
 
@@ -2314,7 +2322,8 @@ void consultaCartasLegendarias() {
 }
 
 
-// 10. Mazos de un jugador
+// Solicita un ID de jugador y muestra todos los mazos cuyo IDJugador coincida,
+// mostrando nombre, tipo y cantidad de cartas de cada mazo.
 void consultaMazosDeJugador() {
     cout << "\n=== Mazos de un jugador ===" << endl;
 
@@ -2350,7 +2359,9 @@ void consultaMazosDeJugador() {
 }
 
 //REPORTES
-// 1.Muestra todas las listas principales del sistema.
+// Muestra un listado resumido de todas las listas principales del sistema:
+// cartas, jugadores, mazos, clanes, arenas y batallas.
+
 void reporteTodasListas() {
     cout << "\n=== REPORTE: Todas las listas ===" << endl;
 
@@ -2408,7 +2419,8 @@ void reporteTodasListas() {
 }
 
 
-// 2.Muestra cada jugador con su arena, clan y mazos.
+// Muestra cada jugador con su arena, clan y lista de mazos asociados,
+// buscando las relaciones por ID en sus respectivas listas.
 void reporteDetalleJugadores() {
     cout << "\n=== REPORTE: Detalle jugadores ===" << endl;
 
@@ -2438,7 +2450,8 @@ void reporteDetalleJugadores() {
 }
 
 
-// 3.Muestra cada mazo con sus cartas.
+// Muestra cada mazo con el nombre de las cartas que contiene,
+// recorriendo la sublista de cada mazo y buscando cada carta por ID.
 void reporteMazosConCartas() {
     cout << "\n=== REPORTE: Mazos con cartas ===" << endl;
 
@@ -2461,7 +2474,8 @@ void reporteMazosConCartas() {
 }
 
 
-// 4.Muestra clanes con sus miembros.
+// Recorre la lista circular de clanes y para cada uno muestra sus miembros
+// buscando cada jugador por ID en la sublista correspondiente.
 void reporteClanesMiembros() {
     cout << "\n=== REPORTE: Clanes ===" << endl;
 
@@ -2486,7 +2500,8 @@ void reporteClanesMiembros() {
 }
 
 
-// 5.Muestra cada arena con los jugadores que pertenecen.
+// Recorre todas las arenas y para cada una muestra los jugadores
+// cuyo IDArena coincide con el de la arena actual.
 void reporteArenaJugadores() {
     cout << "\n=== REPORTE: Arenas ===" << endl;
 
@@ -2510,7 +2525,7 @@ void reporteArenaJugadores() {
 }
 
 
-// 6. Muestra todas las batallas con información básica.
+// Recorre la lista doble circular de batallas y muestra el ID y ganador de cada una.
 void reporteBatallas() {
     cout << "\n=== REPORTE: Batallas ===" << endl;
 
@@ -2526,7 +2541,8 @@ void reporteBatallas() {
 }
 
 
-// 7.Ordena cartas por elixir usando lista enlazada.
+// Ordena las cartas de menor a mayor costo de elixir intercambiando datos entre nodos
+// mediante el algoritmo de burbuja aplicado sobre la lista enlazada, luego las muestra.
 void reporteCartasPorElixir() {
     cout << "\n=== REPORTE: Cartas ordenadas por elixir ===" << endl;
 
@@ -2556,7 +2572,8 @@ void reporteCartasPorElixir() {
 }
 
 
-// 8. Ordena jugadores alfabéticamente.
+// Muestra los jugadores en orden alfabético. Como la lista se mantiene ordenada
+// en tiempo de inserción, simplemente recorre y muestra sin necesidad de reordenar.
 void reporteJugadoresAlfabetico() {
     cout << "\n=== REPORTE: Jugadores alfabetico ===" << endl;
 
@@ -2584,7 +2601,8 @@ void reporteJugadoresAlfabetico() {
 }
 
 
-// 9. Cuenta cuántas batallas ha ganado cada jugador.
+// Recorre la lista de jugadores y para cada uno cuenta cuántas batallas registradas
+// tienen su nombre en el campo ganador, mostrando el conteo total de victorias.
 void reporteBatallasPorJugador() {
     cout << "\n=== REPORTE: Victorias por jugador ===" << endl;
 
@@ -3070,7 +3088,8 @@ void menuBatallas() {
     } while (opcion != 3);
 }
 
-// MENU REPORTES
+// Menú de reportes. Permite al usuario seleccionar entre los 9 reportes disponibles
+// del sistema y navegar de regreso al menú principal.
 void menuReportes() {
     int op;
     do {
@@ -3108,7 +3127,8 @@ void menuReportes() {
 }
 
 
-// MENU CONSULTAS
+// Menú de consultas. Permite al usuario seleccionar entre las 10 consultas disponibles
+// del sistema y navegar de regreso al menú principal.
 void menuConsultas() {
     int op;
     do {
