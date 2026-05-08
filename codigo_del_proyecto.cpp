@@ -1,5 +1,4 @@
 #include <iostream>
-#include <algorithm>
 
 using namespace std;
 
@@ -298,8 +297,7 @@ void insertarCartas(int IDCarta, string nombre, string rareza, string tipo, int 
     // Convertir a minúsculas para comparar
     string rarezaLower = rareza;
     string tipoLower = tipo;
-    transform(rarezaLower.begin(), rarezaLower.end(), rarezaLower.begin(), ::tolower);
-    transform(tipoLower.begin(), tipoLower.end(), tipoLower.begin(), ::tolower);
+   
 
     // Validar rareza
     if(rarezaLower != "comun" && rarezaLower != "rara" && rarezaLower != "epica" && rarezaLower != "legendaria"){
@@ -714,8 +712,7 @@ void modificarCarta(int IDCarta){
     // Convertir a minúsculas para comparar
     string rarezaLower = nuevaRareza;
     string tipoLower = nuevoTipo;
-    transform(rarezaLower.begin(), rarezaLower.end(), rarezaLower.begin(), ::tolower);
-    transform(tipoLower.begin(), tipoLower.end(), tipoLower.begin(), ::tolower);
+
 
     // Validar rareza
     if(rarezaLower != "comun" && rarezaLower != "rara" && rarezaLower != "epica" && rarezaLower != "legendaria"){
