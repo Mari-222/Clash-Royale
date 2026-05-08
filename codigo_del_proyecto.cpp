@@ -283,6 +283,15 @@ Batallas *buscarBatalla(int IDBatalla){
     return NULL;
 }
 
+// Convierte todos los caracteres mayúsculas de un string a minúsculas
+// para permitir comparaciones sin distinción de mayúsculas y minúsculas.
+string toLower(string s) {
+    for (int i = 0; i < (int)s.size(); i++) {
+        if (s[i] >= 'A' && s[i] <= 'Z')
+            s[i] = s[i] + 32;
+    }
+    return s;
+}
 
 //INSERCIONES
 
@@ -295,8 +304,8 @@ void insertarCartas(int IDCarta, string nombre, string rareza, string tipo, int 
     }
 
     // Convertir a minúsculas para comparar
-    string rarezaLower = rareza;
-    string tipoLower = tipo;
+    string rarezaLower = toLower(rareza);
+    string tipoLower = toLower(tipo);
    
 
     // Validar rareza
@@ -710,8 +719,8 @@ void modificarCarta(int IDCarta){
     }
 
     // Convertir a minúsculas para comparar
-    string rarezaLower = nuevaRareza;
-    string tipoLower = nuevoTipo;
+    string rarezaLower = toLower(nuevaRareza);
+    string tipoLower = toLower(nuevoTipo);
 
 
     // Validar rareza
@@ -2234,15 +2243,6 @@ void consultaJugadoresDeClan() {
     }
 }
 
-
-// auxiliar para convertir a minusculas
-string toLower(string s) {
-    for (int i = 0; i < (int)s.size(); i++) {
-        if (s[i] >= 'A' && s[i] <= 'Z')
-            s[i] = s[i] + 32;
-    }
-    return s;
-}
 
 
 // 9. Cartas legendarias
