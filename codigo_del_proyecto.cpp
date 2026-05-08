@@ -3,6 +3,18 @@
 
 using namespace std;
 
+/*Documentación Interna:
+
+Fecha de inicio: 24 de abril
+Última modificación: 8 de mayo
+Nombre de los integrantes del grupo de trabajo:
+Mariana González Céspedes
+Fabricio Alejandro Castro Muñoz 
+Josué David González Alvarado
+
+*/
+
+
 //lista simple 
 struct Cartas{
     int IDCarta;
