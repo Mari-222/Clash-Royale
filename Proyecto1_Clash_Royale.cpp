@@ -2633,15 +2633,19 @@ void reporteCartasPorElixir() {
 
     Cartas *i = primerCarta;
 
-    // ORDENAMIENTO
     while (i) {
         Cartas *j = i->sig;
 
         while (j) {
             if (i->costoElixir > j->costoElixir) {
-                // Intercambio de datos
+                // intercambio
+                swap(i->IDCarta, j->IDCarta);
                 swap(i->Nombre, j->Nombre);
+                swap(i->rareza, j->rareza);
+                swap(i->tipo, j->tipo);
                 swap(i->costoElixir, j->costoElixir);
+                swap(i->danioBase, j->danioBase);
+                swap(i->vidaBase, j->vidaBase);
             }
             j = j->sig;
         }
@@ -2651,37 +2655,27 @@ void reporteCartasPorElixir() {
     // MOSTRAR
     Cartas *c = primerCarta;
     while (c) {
-        cout << c->Nombre << " | " << c->costoElixir << "\n";
+        cout << c->Nombre << " | Elixir: " << c->costoElixir 
+             << " | Daño: " << c->danioBase << " | Vida: " << c->vidaBase << "\n";
         c = c->sig;
     }
 }
-
-
 // Muestra los jugadores en orden alfabético. Como la lista se mantiene ordenada
 // en tiempo de inserción, simplemente recorre y muestra sin necesidad de reordenar.
 void reporteJugadoresAlfabetico() {
     cout << "\n=== REPORTE: Jugadores alfabetico ===" << endl;
 
-    Jugadores *i = primerJugador;
+    Jugadores *aux = primerJugador;
 
-    while (i) {
-        Jugadores *j = i->sig;
-
-        while (j) {
-            if (i->nombreUsuario > j->nombreUsuario) {
-                // Intercambio
-                swap(i->nombreUsuario, j->nombreUsuario);
-                swap(i->trofeos, j->trofeos);
-            }
-            j = j->sig;
-        }
-        i = i->sig;
+    if (aux == NULL) {
+        cout << "No hay jugadores registrados." << endl;
+        return;
     }
 
-    Jugadores *aux = primerJugador;
-    while (aux) {
-        cout << aux->nombreUsuario << "\n";
-        aux = aux->sig;
+    // Como la inserción ya garantiza el orden, solo imprime
+    while (aux != NULL) {
+        cout << "Usuario: " << aux->nombreUsuario << " | Trofeos: " << aux->trofeos << endl;
+        aux = aux->sig; 
     }
 }
 
