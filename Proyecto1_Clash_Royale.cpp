@@ -1470,7 +1470,7 @@ void cargarDatos(){
     insertarArena(7, "Constructor Real", 2000, 2299);
     insertarArena(8, "Arena Legendaria", 2300, 2599);
     insertarArena(9, "Liga de Plata", 2600, 2999);
-    insertarArena(10, "Liga de Oro", 3000, 9999);
+    insertarArena(10, "Liga de Oro", 3000, 10000);
 
     // ===== CARTAS (segundo porque mazos dependen de ellas) =====
     insertarCartas(1, "Caballero", "Comun", "Tropa", 3, 75.0, 1400);
