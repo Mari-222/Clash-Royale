@@ -496,6 +496,21 @@ void insertarJugador(int IDJ, string n, int nr, int t, int IDA, int IDC){
         actual->sig->ant = nuevoJugador;
     }
     actual->sig = nuevoJugador;
+
+    if(IDC != 0){ // Si el jugador tiene clan asignado, agregarlo a la lista de miembros del clan
+        Clanes *clan = buscarClan(IDC);
+        NodoJugadorClan *nuevoMiembro = new NodoJugadorClan(IDJ);
+        if(clan->listaJugadores == NULL){
+            clan->listaJugadores = nuevoMiembro;
+        } else {
+            NodoJugadorClan *temp = clan->listaJugadores;
+            while(temp->sig != NULL){
+                temp = temp->sig;
+            }
+            temp->sig = nuevoMiembro;
+        }
+        clan->cantidadMiembros++;
+    }
 }
 
 // Inserta un nuevo mazo al final de la lista simple.
@@ -1505,20 +1520,27 @@ void cargarDatos(){
     // ===== JUGADORES (cuarto porque mazos dependen de ellos) =====
     // Trofeos deben corresponder al rango de la arena asignada
     insertarJugador(1, "Alejandro", 10, 2400, 8, 0);
-    insertarJugador(2, "Beatriz", 8, 1700, 6, 2);
+    insertarJugador(2, "Beatriz", 8, 1700, 6, 0);
     insertarJugador(3, "Carlos", 12, 3100, 10, 0);
-    insertarJugador(4, "Diana", 9, 2100, 7, 4);
-    insertarJugador(5, "Eduardo", 11, 2800, 9, 1);
-    insertarJugador(6, "Fernanda", 7, 1400, 5, 3);
+    insertarJugador(4, "Diana", 9, 2100, 7, 0);
+    insertarJugador(5, "Eduardo", 11, 2800, 9, 0);
+    insertarJugador(6, "Fernanda", 7, 1400, 5, 0);
     insertarJugador(7, "Gabriel", 13, 3500, 10, 0);
-    insertarJugador(8, "Helena", 6, 900, 3, 8);
-    insertarJugador(9, "Ivan", 10, 2300, 8, 5);
-    insertarJugador(10, "Julia", 8, 1600, 6, 10);
+    insertarJugador(8, "Helena", 6, 900, 3, 0);
+    insertarJugador(9, "Ivan", 10, 2300, 8, 0);
+    insertarJugador(10, "Julia", 8, 1600, 6, 00);
 
     // ===== ASIGNAR JUGADORES A CLANES =====
     insertarJugadorEnClan(3, 1);  // Alejandro -> Legion Dorada
-    insertarJugadorEnClan(5, 3);  // Carlos -> Sombras Eternas
+    insertarJugadorEnClan(2, 2);  // Beatriz -> Guerreros del Sur
+    insertarJugadorEnClan(1, 3);  // Carlos -> Dragones del Norte
+    insertarJugadorEnClan(4, 4);  // Diana -> Furia Barbara
+    insertarJugadorEnClan(7, 5);  // Eduardo -> Caballeros Reales
+    insertarJugadorEnClan(6, 6);  // Fernanda -> Guardianes del Hielo
     insertarJugadorEnClan(5, 7);  // Gabriel -> Sombras Eternas
+    insertarJugadorEnClan(9, 8);  // Helena -> Guardianes del Hielo
+    insertarJugadorEnClan(10, 9); // Ivan -> Alianza Suprema
+    insertarJugadorEnClan(8, 10);  // Julia -> Tormenta Arcana
 
     // ===== MAZOS (quinto porque batallas dependen de ellos) =====
     insertarMazo(1, "Mazo Gigante", "Asalto", 1);
