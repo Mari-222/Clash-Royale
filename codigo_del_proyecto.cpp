@@ -814,6 +814,13 @@ void modificarCarta(int IDCarta){
     int nuevoCosto, nuevaVida;
     double nuevoDanio;
 
+    cout << "Nuevo nombre: ";
+    cin.ignore();
+    getline(cin, nuevoNombre);
+    cout << "Nueva rareza: ";
+    getline(cin, nuevaRareza);
+    cout << "Nuevo tipo: ";
+    getline(cin, nuevoTipo);
     nuevoCosto = leerEntero("Nuevo costo de elixir: ", 1, 9);
     nuevoDanio = leerDouble("Nuevo dano base: ", 0, 99999);
     nuevaVida = leerEntero("Nueva vida base: ", 0, 99999);
@@ -1056,14 +1063,9 @@ void modificarClan(int IDClan){
     string nuevoNombreClan, nuevaRegion;
     double nuevoPuntaje;
 
-    cout << "Nuevo nombre del clan: ";
-    cin >> nuevoNombreClan;
-    cin.ignore();
-    cout << "Nueva región: ";
-    cin >> nuevaRegion;
-    cin.ignore();
-    cout << "Nuevo puntaje del clan: ";
-    cin >> nuevoPuntaje;
+    nuevoNombreClan = leerString("Nuevo nombre del clan: ");
+    nuevaRegion = leerString("Nueva region: ");
+    nuevoPuntaje = leerDouble("Nuevo puntaje del clan: ", 0, 99999);
 
     // Validación básica
     if(nuevoPuntaje < 0){
@@ -1141,13 +1143,9 @@ void modificarArena(int IDA){
     string nuevoNombreArena;
     int nuevoTrofeosMin, nuevoTrofeosMax;
 
-    cout << "Nuevo nombre de la arena: ";
-    cin >> nuevoNombreArena;
-    cin.ignore();
-    cout << "Nuevo rango mínimo de trofeos: ";
-    cin >> nuevoTrofeosMin;
-    cout << "Nuevo rango máximo de trofeos: ";
-    cin >> nuevoTrofeosMax;
+    nuevoNombreArena = leerString("Nuevo nombre de la arena: ");
+    nuevoTrofeosMin = leerEntero("Nuevo rango minimo de trofeos: ", 0, 15000);
+    nuevoTrofeosMax = leerEntero("Nuevo rango maximo de trofeos: ", 0, 15000);
 
     // Validacioenes básicas
     if(nuevoTrofeosMin < 0 || nuevoTrofeosMax < 0){
@@ -2028,11 +2026,11 @@ void menuSimulacion() {
                 string fecha;
 
                 idJ1=leerEntero("ID del jugador 1: ", 1, 99999);
-                idJ1=leerEntero("ID del jugador 2: ", 1,99999);
+                idJ2=leerEntero("ID del jugador 2: ", 1,99999);
                 idM1=leerEntero("ID del mazo del jugador 1: ", 1,99999);
                 idM2=leerEntero("ID del mazo del jugador 2: ", 1,99999);
                 idArena=leerEntero("ID de la arena: ", 1,99999);
-                string fecha=leerString("Fecha (AAAA-MM-DD): ");
+                fecha=leerString("Fecha (AAAA-MM-DD): ");
                 simularBatalla(idJ1, idJ2, idM1, idM2, idArena, fecha);
                 break;
             }
@@ -2724,15 +2722,16 @@ void menuCartas() {
             case 1: {
                 cout << "\n--- Insertar Carta ---" << endl;
                 int id, costo, vida;
+                double danio;
                 string nombre, rareza, tipo;
 
-                int id = leerEntero("ID de la carta: ", 0, 9999);//ponemoslimites hatsa 9999 para que no existan errores con letras o floats
-                string nombre = leerString("Nombre: ");
-                string rareza = leerString("Rareza (Comun/Rara/Epica/Legendaria): ");
-                string tipo = leerString("Tipo (Tropa/Hechizo/Edificio): ");
-                int costo = leerEntero("Costo de elixir: ", 1, 9);
-                double danio = leerDouble("Daño base: ", 0, 99999);//cambiamos daño por danio para mejor visualizacion en la terminal 
-                int vida = leerEntero("Vida base: ", 0, 99999);
+                id = leerEntero("ID de la carta: ", 0, 9999);//ponemoslimites hatsa 9999 para que no existan errores con letras o floats
+                nombre = leerString("Nombre: ");
+                rareza = leerString("Rareza (Comun/Rara/Epica/Legendaria): ");
+                tipo = leerString("Tipo (Tropa/Hechizo/Edificio): ");
+                costo = leerEntero("Costo de elixir: ", 1, 9);
+                danio = leerDouble("Daño base: ", 0, 99999);//cambiamos daño por danio para mejor visualizacion en la terminal 
+                vida = leerEntero("Vida base: ", 0, 99999);
 
                 insertarCartas(id, nombre, rareza, tipo, costo, danio, vida);
                 break;
@@ -2740,14 +2739,14 @@ void menuCartas() {
             case 2: {
                 cout << "\n--- Modificar Carta ---" << endl;
                 int id;
-                id=leerEntero("ID de la carta a modificar: ");
+                id=leerEntero("ID de la carta a modificar: ", 0, 9999);
                 modificarCarta(id);
                 break;
             }
             case 3: {
                 cout << "\n--- Eliminar Carta ---" << endl;
                 int id;
-                id=leerEntero("ID de la carta a eliminar: "):
+                id=leerEntero("ID de la carta a eliminar: ", 0, 9999);
                 eliminarCarta(id);
                 break;
             }
@@ -2785,12 +2784,12 @@ void menuJugadores() {
                 int id, nivel, trofeos, idArena, idClan;
                 string nombre;
 
-                int id = leerEntero("ID del jugador: ", 0, 9999);
-                string nombre = leerString("Nombre de usuario: ");
-                int nivel = leerEntero("Nivel del rey (1-15): ", 1, 15);
-                int trofeos = leerEntero("Trofeos: ", 0, 10000);
-                int idArena = leerEntero("ID de arena: ", 1, 10); //segun la arena
-                int idClan = leerEntero("ID de clan (0 = sin clan): ", 0, 10);
+                id = leerEntero("ID del jugador: ", 0, 9999);
+                nombre = leerString("Nombre de usuario: ");
+                nivel = leerEntero("Nivel del rey (1-15): ", 1, 15);
+                trofeos = leerEntero("Trofeos: ", 0, 10000);
+                idArena = leerEntero("ID de arena: ", 1, 10); //segun la arena
+                idClan = leerEntero("ID de clan (0 = sin clan): ", 0, 10);
 
                 insertarJugador(id, nombre, nivel, trofeos, idArena, idClan);
                 break;
@@ -2934,42 +2933,42 @@ void menuClanes() {
                 string nombre, region;
 
 
-                int id = leerEntero("ID del clan:  ", 0, 9999);
-                string nombre = leerString("Nombre del clan: ");
-                string region = leerString("Region: ");
-                string miembros = leerString("Cantidad de miembros: ");
-                double puntaje = leerDouble("Puntaje del clan: ",1,99999);   
+                id = leerEntero("ID del clan:  ", 0, 9999);
+                nombre = leerString("Nombre del clan: ");
+                region = leerString("Region: ");
+                miembros = leerEntero("Cantidad de miembros: ", 0, 9999);
+                puntaje = leerDouble("Puntaje del clan: ",1,99999);   
 
-                insertarJugador(id, nombre, region, miembros,puntaje);
+                insertarClan(id, nombre, region, miembros,puntaje);
                 break;
             }
             case 2: {
                 cout << "\n--- Agregar Jugador a Clan ---" << endl;
                 int idClan, idJugador;
-                int idClan = leerEntero("ID del clan:  ", 0, 9999);
-                int idJugador = leerEntero("ID del Jugador:  ", 0, 9999);
+                idClan = leerEntero("ID del clan:  ", 0, 9999);
+                idJugador = leerEntero("ID del Jugador:  ", 0, 9999);
                 insertarJugadorEnClan(idClan, idJugador);
                 break;
             }
             case 3: {
                 cout << "\n--- Modificar Clan ---" << endl;
                 int id;
-                int id = leerEntero("ID del clan a modificar:  ", 0, 9999);
+                id = leerEntero("ID del clan a modificar:  ", 0, 9999);
                 modificarClan(id);
                 break;
             }
             case 4: {
                 cout << "\n--- Eliminar Clan ---" << endl;
                 int id;
-                int id = leerEntero("ID del clan a eliminar:  ", 0, 9999);
+                id = leerEntero("ID del clan a eliminar:  ", 0, 9999);
                 eliminarClan(id);
                 break;
             }
             case 5: {
                 cout << "\n--- Eliminar Jugador de Clan ---" << endl;
                 int idClan, idJugador;
-                int idClan = leerEntero("ID del clan del jugador:  ", 0, 9999);
-                int idJugador = leerEntero("ID del Jugador a eliminar:  ", 0, 9999);
+                idClan = leerEntero("ID del clan del jugador:  ", 0, 9999);
+                idJugador = leerEntero("ID del Jugador a eliminar:  ", 0, 9999);
                 eliminarJugadorDeClan(idClan, idJugador);
                 break;
             }
@@ -3006,24 +3005,24 @@ void menuArenas() {
                 cout << "\n--- Insertar Arena ---" << endl;
                 int id, tmin, tmax;
                 string nombre;
-                int id = leerEntero("ID de la Arena:  ", 0, 99999);
-                string nombre = leerString("Nombre de la Arena: ");
-                int id = leerEntero("Trofeos maximos  ", 0, 15000);//28 arenas
-                int id = leerEntero("Trofeos minimos:  ", 0, 15000);//
+                id = leerEntero("ID de la Arena:  ", 0, 99999);
+                nombre = leerString("Nombre de la Arena: ");
+                tmin = leerEntero("Trofeos minimos:  ", 0, 15000);
+                tmax = leerEntero("Trofeos maximos  ", 0, 15000);
                 insertarArena(id, nombre, tmin, tmax);
                 break;
             }
             case 2: {
                 cout << "\n--- Modificar Arena ---" << endl;
                 int id;
-                int id = leerEntero("ID de la Arena a modificar:  ", 0, 99999);
+                id = leerEntero("ID de la Arena a modificar:  ", 0, 99999);
                 modificarArena(id);
                 break;
             }
             case 3: {
                 cout << "\n--- Eliminar Arena ---" << endl;
                 int id;
-                int id = leerEntero("ID de la Arena a eliminar:  ", 0, 99999);
+                id = leerEntero("ID de la Arena a eliminar:  ", 0, 99999);
                 eliminarArena(id);
                 break;
             }
@@ -3061,17 +3060,17 @@ void menuBatallas() {
                 float duracion;
                 string ganador, fecha;
 
-                 int id = leerEntero("ID de la batalla: ", 0, 9999);
-                int idJ1 = leerEntero("ID jugador 1: ", 0, 9999);
-                int idJ2 = leerEntero("ID jugador 2: ", 0, 9999);
-                int idM1 = leerEntero("ID mazo jugador 1: ", 0, 9999);
-                int idM2 = leerEntero("ID mazo jugador 2: ", 0, 9999);
-                string ganador = leerString("Nombre del ganador: ");
-                int cJ1 = leerEntero("Coronas jugador 1 (0-3): ", 0, 3);
-                int cJ2 = leerEntero("Coronas jugador 2 (0-3): ", 0, 3);
-                float duracion = (float)leerDouble("Duracion (minutos): ", 0, 10.0);
-                int idArena = leerEntero("ID de arena: ", 0, 9999);
-                string fecha = leerString("Fecha (AAAA-MM-DD): ");
+                id = leerEntero("ID de la batalla: ", 0, 9999);
+                idJ1 = leerEntero("ID jugador 1: ", 0, 9999);
+                idJ2 = leerEntero("ID jugador 2: ", 0, 9999);
+                idM1 = leerEntero("ID mazo jugador 1: ", 0, 9999);
+                idM2 = leerEntero("ID mazo jugador 2: ", 0, 9999);
+                ganador = leerString("Nombre del ganador: ");
+                cJ1 = leerEntero("Coronas jugador 1 (0-3): ", 0, 3);
+                cJ2 = leerEntero("Coronas jugador 2 (0-3): ", 0, 3);
+                duracion = (float)leerDouble("Duracion (minutos): ", 0, 10.0);
+                idArena = leerEntero("ID de arena: ", 0, 9999);
+                fecha = leerString("Fecha (AAAA-MM-DD): ");
 
                 insertarBatalla(id, idJ1, idJ2, idM1, idM2, ganador, cJ1, cJ2, duracion, idArena, fecha, 0,0,"","",0,0);
                 break;
@@ -3081,7 +3080,7 @@ void menuBatallas() {
             case 2: {
                 cout << "\n--- Eliminar Batalla ---" << endl;
                 int id;
-                int id = leerEntero("ID de la batalla a eliminar: ", 0, 9999);
+                id = leerEntero("ID de la batalla a eliminar: ", 0, 9999);
                 eliminarBatalla(id);
                 break;
             }
