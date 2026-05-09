@@ -2641,8 +2641,8 @@ void reporteCartasPorElixir() {
                 // intercambio
                 swap(i->IDCarta, j->IDCarta);
                 swap(i->Nombre, j->Nombre);
-                swap(i->rareza, j->rareza);
-                swap(i->tipo, j->tipo);
+                swap(i->Rareza, j->Rareza);
+                swap(i->Tipo, j->Tipo);
                 swap(i->costoElixir, j->costoElixir);
                 swap(i->danioBase, j->danioBase);
                 swap(i->vidaBase, j->vidaBase);
