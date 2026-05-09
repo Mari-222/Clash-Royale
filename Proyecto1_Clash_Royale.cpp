@@ -799,6 +799,7 @@ void insertarJugadorEnClan(int IDClan, int IDJugador){
             ultimo = ultimo->sig;
         }
         ultimo->sig = nuevoJugador;
+        cout << "Jugador agregado al clan correctamente." << endl;
     }
 
     // actualizar relación en el jugador
@@ -806,7 +807,7 @@ void insertarJugadorEnClan(int IDClan, int IDJugador){
 
     clan->cantidadMiembros++;
 
-    cout << "Jugador agregado al clan correctamente." << endl;
+    
 }
 
 
