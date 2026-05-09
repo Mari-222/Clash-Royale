@@ -2429,7 +2429,7 @@ void reporteTodasListas() {
     cout << "\n=== REPORTE: Todas las listas ===" << endl;
 
     // CARTAS
-    cout << "\n// CARTAS\n";
+    cout << "\n CARTAS\n";
     Cartas *c = primerCarta;
     while (c) {
         cout << c->Nombre << " | Elixir: " << c->costoElixir << "\n";
@@ -2437,7 +2437,7 @@ void reporteTodasListas() {
     }
 
     // JUGADORES
-    cout << "\n// JUGADORES\n";
+    cout << "\n JUGADORES\n";
     Jugadores *j = primerJugador;
     while (j) {
         cout << j->nombreUsuario << " | Trofeos: " << j->trofeos << "\n";
@@ -2445,7 +2445,7 @@ void reporteTodasListas() {
     }
 
     // MAZOS
-    cout << "\n// MAZOS\n";
+    cout << "\n MAZOS\n";
     Mazos *m = primerMazo;
     while (m) {
         cout << m->nombreMazo << " | Cartas: " << m->cantidadCartas << "\n";
@@ -2453,7 +2453,7 @@ void reporteTodasListas() {
     }
 
     // CLANES (lista circular)
-    cout << "\n// CLANES\n";
+    cout << "\n CLANES\n";
     if (primerClan) {
         Clanes *cl = primerClan;
         do {
@@ -2463,7 +2463,7 @@ void reporteTodasListas() {
     }
 
     // ARENAS
-    cout << "\n// ARENAS\n";
+    cout << "\n ARENAS\n";
     Arenas *a = primerArena;
     while (a) {
         cout << a->nombreArena << "\n";
@@ -2471,7 +2471,7 @@ void reporteTodasListas() {
     }
 
     // BATALLAS (lista doble circular)
-    cout << "\n// BATALLAS\n";
+    cout << "\n BATALLAS\n";
     if (primerBatalla) {
         Batallas *b = primerBatalla;
         do {
